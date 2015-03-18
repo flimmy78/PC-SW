@@ -1,6 +1,6 @@
 object F_Key: TF_Key
-  Left = 167
-  Top = 142
+  Left = 300
+  Top = 331
   Align = alClient
   BorderStyle = bsNone
   Caption = #38053#21273
@@ -17,13 +17,6 @@ object F_Key: TF_Key
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object Label3: TLabel
-    Left = 24
-    Top = 38
-    Width = 89
-    Height = 13
-    Caption = #33455#29255'ID'#21069#23548#30721'      '
-  end
   object scrlbx0: TScrollBox
     Left = 0
     Top = 0

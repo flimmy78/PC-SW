@@ -38,7 +38,8 @@ uses
   U_Multi in 'U_Multi.pas',
   U_Key in 'U_Key.pas' {F_Key},
   U_Temp in 'U_Temp.pas' {F_Temp},
-  U_Noise in 'U_Noise.pas' {F_Noise};
+  U_Noise in 'U_Noise.pas' {F_Noise},
+  U_Plc in 'U_Plc.pas' {F_Plc};
 
 {$R *.res}
 
@@ -49,5 +50,6 @@ begin
   Application.CreateForm(TF_Key, F_Key);
   Application.CreateForm(TF_Temp, F_Temp);
   Application.CreateForm(TF_Noise, F_Noise);
+  Application.CreateForm(TF_Plc, F_Plc);
   Application.Run;
 end.

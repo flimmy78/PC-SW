@@ -19,7 +19,6 @@ type
     edt_user_pwd: TEdit;
     scrlbx2: TGroupBox;
     btn_write_param: TBitBtn;
-    Label3: TLabel;
     Label1: TLabel;
     Label5: TLabel;
     edt_id_yet: TEdit;

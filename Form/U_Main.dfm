@@ -1,6 +1,6 @@
 object F_Main: TF_Main
-  Left = 255
-  Top = 238
+  Left = 292
+  Top = 372
   Width = 1092
   Height = 546
   Caption = 'Delphi'
@@ -267,7 +267,7 @@ object F_Main: TF_Main
         Top = 0
         Width = 1071
         Height = 255
-        ActivePage = ts_noise
+        ActivePage = ts_plc
         Align = alClient
         TabOrder = 0
         object ts_update: TTabSheet
@@ -314,6 +314,10 @@ object F_Main: TF_Main
           Caption = #22122#22768#26657#20934
           ImageIndex = 10
         end
+        object ts_plc: TTabSheet
+          Caption = #30005#21147#25220#34920#25484#26426
+          ImageIndex = 11
+        end
       end
       object pgc2: TPageControl
         Left = 0
@@ -354,7 +358,7 @@ object F_Main: TF_Main
   end
   object tmr1: TTimer
     OnTimer = tmr1Timer
-    Left = 557
+    Left = 653
     Top = 465
   end
 end

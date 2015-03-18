@@ -40,8 +40,8 @@ procedure TF_Operation.FormCreate(Sender: TObject);
 begin
     //strngrd_oper.ColWidths[0] := 12;
     strngrd_oper.ColWidths[0] := 0;
-    strngrd_oper.ColWidths[oper_col_time] := 85;
-    strngrd_oper.ColWidths[oper_col_oper] := 650;
+    strngrd_oper.ColWidths[oper_col_time] := 150;
+    strngrd_oper.ColWidths[oper_col_oper] := 1195;
     strngrd_oper.Cells[oper_col_time,0] := 'Ê±¼ä';
     strngrd_oper.Cells[oper_col_oper,0] := '²Ù×÷';
 end;
