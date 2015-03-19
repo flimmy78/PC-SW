@@ -1,6 +1,6 @@
 object F_Plc: TF_Plc
-  Left = 482
-  Top = 189
+  Left = 397
+  Top = 276
   Align = alClient
   BorderStyle = bsNone
   Caption = #30005#21147#25220#34920#25484#26426
@@ -41,37 +41,21 @@ object F_Plc: TF_Plc
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
-        object btn_read_prm: TBitBtn
-          Left = 493
+        object btn_upload: TBitBtn
+          Left = 779
           Top = 8
           Width = 75
           Height = 25
-          Caption = #35835#21442#25968
+          Caption = #19978#20256
           TabOrder = 0
         end
-        object rb_name: TRadioButton
-          Left = 16
-          Top = 13
-          Width = 113
-          Height = 17
-          Caption = #21517#31216
+        object btn_sync: TBitBtn
+          Left = 462
+          Top = 8
+          Width = 75
+          Height = 25
+          Caption = #21516#27493
           TabOrder = 1
-        end
-        object rb_size: TRadioButton
-          Left = 129
-          Top = 13
-          Width = 113
-          Height = 17
-          Caption = #22823#23567
-          TabOrder = 2
-        end
-        object rb_content: TRadioButton
-          Left = 242
-          Top = 13
-          Width = 113
-          Height = 17
-          Caption = #20869#23481
-          TabOrder = 3
         end
       end
       object strngrd_file_manage: TStringGrid
@@ -85,8 +69,27 @@ object F_Plc: TF_Plc
         FixedColor = clActiveBorder
         RowCount = 2
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
+        PopupMenu = pm_file_manage
         TabOrder = 1
+        OnDrawCell = strngrd_file_manage_DrawCell
+        OnKeyDown = strngrd_file_manage_KeyDown
       end
+    end
+  end
+  object pm_file_manage: TPopupMenu
+    Left = 32
+    Top = 88
+    object N_scroll: TMenuItem
+      AutoCheck = True
+      Caption = #28378#23631
+      Checked = True
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object N_clear: TMenuItem
+      Caption = #28165#31354
+      OnClick = N_clearClick
     end
   end
 end
