@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Buttons, StdCtrls, Grids, ExtCtrls, U_MyFunction, Menus;
+  Dialogs, Buttons, StdCtrls, Grids, ExtCtrls, Menus, U_MyFunction, U_Protocol, 
+  U_Protocol_645, U_Multi, U_Disp, U_Main;
 
 type
   TF_Plc = class(TForm)
@@ -24,15 +25,22 @@ type
     procedure strngrd_file_manage_KeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure N_clearClick(Sender: TObject);
+    procedure btn_syncClick(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
-    function  ClearOperation():Boolean;
+    function ClearOperation():Boolean;
   end;
 
 var
   F_Plc: TF_Plc;
+  DLT645:T_Protocol_645;
+  P_DLT645_Frame:PByte;
+  DLT645_Ctrl:Byte;
+  DLT645_Len:Integer;
+  DLT645_DI:LongWord;
+  DLT645_Data:Array[0..255] of Byte;
 
 implementation
 
@@ -49,10 +57,11 @@ begin
     strngrd_file_manage.ColWidths[file_manage_size] := 650;
     strngrd_file_manage.Cells[file_manage_name, 0]  := 'Ãû³Æ';
     strngrd_file_manage.Cells[file_manage_size, 0]  := '´óÐ¡';
+
+    DLT645 := T_Protocol_645.Create();
 end;
 
 function  TF_Plc.ClearOperation():Boolean;
-var i:Integer;
 begin
     strngrd_file_manage.RowCount := 2;
     strngrd_file_manage.Rows[1].Clear;
@@ -89,6 +98,38 @@ end;
 procedure TF_Plc.N_clearClick(Sender: TObject);
 begin
     ClearOperation();
+end;
+
+procedure TF_Plc.btn_syncClick(Sender: TObject);
+var
+	len:Integer;
+begin
+	TButton(Sender).Enabled := False;
+
+	DLT645_Ctrl := $91;
+	
+	DLT645_DI := $F0000000;
+	
+	len := 4;
+
+	P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
+
+	DLT645_Len := DLT645.GetFrameLen();
+
+	CommMakeFrame2(P_DLT645_Frame, DLT645_Len);
+
+	if F_Main.SendDataAuto()
+		and CommWaitForResp()
+	then
+	begin	
+	
+	end
+	else
+	begin	
+	
+	end;
+
+	TButton(Sender).Enabled := True;
 end;
 
 end.

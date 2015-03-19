@@ -1,6 +1,6 @@
 object F_Main: TF_Main
-  Left = 238
-  Top = 163
+  Left = 219
+  Top = 197
   Width = 1092
   Height = 546
   Caption = 'Delphi'

@@ -1,6 +1,6 @@
 object F_Plc: TF_Plc
   Left = 397
-  Top = 276
+  Top = 237
   Align = alClient
   BorderStyle = bsNone
   Caption = #30005#21147#25220#34920#25484#26426
@@ -56,6 +56,7 @@ object F_Plc: TF_Plc
           Height = 25
           Caption = #21516#27493
           TabOrder = 1
+          OnClick = btn_syncClick
         end
       end
       object strngrd_file_manage: TStringGrid
@@ -71,8 +72,6 @@ object F_Plc: TF_Plc
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
         PopupMenu = pm_file_manage
         TabOrder = 1
-        OnDrawCell = strngrd_file_manage_DrawCell
-        OnKeyDown = strngrd_file_manage_KeyDown
       end
     end
   end
