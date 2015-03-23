@@ -102,13 +102,16 @@ end;
 
 procedure TF_Plc.btn_syncClick(Sender: TObject);
 var
-	len:Integer;
+	p, pdata:PByte;
+	len, i:Integer;
+	DI:LongWord;
+	str:string;
 begin
 	TButton(Sender).Enabled := False;
 
 	DLT645_Ctrl := $91;
 	
-	DLT645_DI := $F0000000;
+	DLT645_DI := $F0000100;
 	
 	len := 4;
 
@@ -122,7 +125,44 @@ begin
 		and CommWaitForResp()
 	then
 	begin	
-	
+		if CommRecved = True then
+    	begin
+    		CommRecved := False;
+    		
+       		p := GetCommRecvBufAddr();
+      		len := GetCommRecvDataLen();   	
+      		
+      		if DLT645.CheckFrame(p, len) = True then
+      		begin
+      			DI := DLT645.GetDI();
+      			pdata := DLT645.GetDataUnit();
+      			len := DLT645.GetDataUnitLen(); 
+
+      			inc(pdata);
+      			inc(pdata);
+      			inc(pdata);
+      			inc(pdata);
+      			len := len - 4;
+
+				for i:=0 to (len - 1) do
+				begin
+					str := str + chr(pdata^);
+					inc(pdata);
+				end;
+				
+      			strngrd_file_manage.Cells[file_manage_name, 1] := Format('%s', [str]);
+      			
+      			g_disp.DispLog('同步成功');
+      		end
+      		else
+      		begin
+      			g_disp.DispLog('同步失败');
+      		end;
+	    end
+	    else
+	    begin
+	      g_disp.DispLog('串口接收无数据');
+	    end;      		
 	end
 	else
 	begin	
