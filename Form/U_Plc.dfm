@@ -1,6 +1,6 @@
 object F_Plc: TF_Plc
-  Left = 397
-  Top = 237
+  Left = 382
+  Top = 184
   Align = alClient
   BorderStyle = bsNone
   Caption = #30005#21147#25220#34920#25484#26426
@@ -48,6 +48,7 @@ object F_Plc: TF_Plc
           Height = 25
           Caption = #19978#20256
           TabOrder = 0
+          OnClick = btn_uploadClick
         end
         object btn_sync: TBitBtn
           Left = 462
@@ -69,7 +70,7 @@ object F_Plc: TF_Plc
         DefaultRowHeight = 16
         FixedColor = clActiveBorder
         RowCount = 2
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goRowSelect]
         PopupMenu = pm_file_manage
         TabOrder = 1
       end

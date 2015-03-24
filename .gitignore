@@ -52,3 +52,9 @@
 # Delphi history and backups
 __history/
 *.~*
+
+# 开放模式 @华兄
+Exec/
+Temp/
+
+# 保守模式 @华兄

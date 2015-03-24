@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Buttons, StdCtrls, Grids, ExtCtrls, Menus, U_MyFunction, U_Protocol, 
+  Dialogs, Buttons, StdCtrls, Spin, Grids, ExtCtrls, Menus, U_MyFunction, U_Protocol, 
   U_Protocol_645, U_Multi, U_Disp, U_Main;
 
 type
@@ -26,11 +26,13 @@ type
       Shift: TShiftState);
     procedure N_clearClick(Sender: TObject);
     procedure btn_syncClick(Sender: TObject);
+    procedure btn_uploadClick(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
-    function ClearOperation():Boolean;
+    function strngrd_file_manage_Display(strConten:string):Boolean;
+    function strngrd_file_manage_Clear():Boolean;
   end;
 
 var
@@ -46,13 +48,14 @@ implementation
 
 {$R *.dfm}
 
-const file_manage_name = 1;
+const file_manage_null = 0;
+      file_manage_name = 1;
       file_manage_size = 2;
 
 procedure TF_Plc.FormCreate(Sender: TObject);
 begin
     inherited;
-    strngrd_file_manage.ColWidths[0] := 0;
+    strngrd_file_manage.ColWidths[file_manage_null] := 0;
     strngrd_file_manage.ColWidths[file_manage_name] := 650;
     strngrd_file_manage.ColWidths[file_manage_size] := 650;
     strngrd_file_manage.Cells[file_manage_name, 0]  := '名称';
@@ -61,7 +64,32 @@ begin
     DLT645 := T_Protocol_645.Create();
 end;
 
-function  TF_Plc.ClearOperation():Boolean;
+function TF_Plc.strngrd_file_manage_Display(strConten:string):Boolean;
+var 
+	t:SYSTEMTIME;
+    strTime:string;
+    nRow:Integer;
+begin
+    GetLocalTime(t);
+    strTime := Format('%.2d:%.2d:%.2d %.3d',[t.wHour,t.wMinute,t.wSecond,t.wMilliseconds]);
+    nRow := strngrd_file_manage.RowCount - 1;
+    
+    if strngrd_file_manage.Cells[file_manage_name, nRow] <> '' then
+    begin
+        Inc(nRow);
+        strngrd_file_manage.RowCount := nRow + 1;
+    end;
+    
+    strngrd_file_manage.Cells[file_manage_size, nRow] := strTime;
+    strngrd_file_manage.Cells[file_manage_name, nRow] := strConten;
+    
+    if N_scroll.Checked then
+    begin
+        strngrd_file_manage.Row := strngrd_file_manage.RowCount - 1;
+    end;
+end;
+
+function TF_Plc.strngrd_file_manage_Clear():Boolean;
 begin
     strngrd_file_manage.RowCount := 2;
     strngrd_file_manage.Rows[1].Clear;
@@ -95,9 +123,28 @@ begin
         end;
 end;
 
+function NewTxtFile(fname:string):BOOLEAN;
+var
+  F:TextFile;
+begin
+  AssignFile(F, fname); //将文件名与F关联
+  if FileExists(fname) then
+  begin
+    Append(F);
+    Closefile(F); //关闭文件F
+    Result := False;
+  end
+  else
+  begin
+    ReWrite(F); //创建TXT文件，并命名为'fname'
+    Closefile(F); //关闭文件F
+    Result := True;
+  end;
+end;
+
 procedure TF_Plc.N_clearClick(Sender: TObject);
 begin
-    ClearOperation();
+    strngrd_file_manage_Clear();
 end;
 
 procedure TF_Plc.btn_syncClick(Sender: TObject);
@@ -110,7 +157,7 @@ begin
 	TButton(Sender).Enabled := False;
 
 	DLT645_Ctrl := $91;
-	
+
 	DLT645_DI := $F0000100;
 	
 	len := 4;
@@ -150,7 +197,7 @@ begin
 					inc(pdata);
 				end;
 				
-      			strngrd_file_manage.Cells[file_manage_name, 1] := Format('%s', [str]);
+      			strngrd_file_manage_Display(str);
       			
       			g_disp.DispLog('同步成功');
       		end
@@ -167,6 +214,26 @@ begin
 	else
 	begin	
 	
+	end;
+
+	TButton(Sender).Enabled := True;
+end;
+
+procedure TF_Plc.btn_uploadClick(Sender: TObject);
+var 
+	fname:string;
+begin
+	TButton(Sender).Enabled := False;
+
+	fname := strngrd_file_manage.Cells[file_manage_name, strngrd_file_manage.selection.bottom];
+
+	if NewTxtFile(fname) = False then
+	begin	
+		g_disp.DispLog('追加文件: ' + ExtractFilePath(ParamStr(0)) + fname);
+	end
+	else
+	begin
+		g_disp.DispLog('创建文件: ' + ExtractFilePath(ParamStr(0)) + fname);
 	end;
 
 	TButton(Sender).Enabled := True;
