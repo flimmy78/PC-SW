@@ -123,23 +123,39 @@ begin
         end;
 end;
 
-function NewTxtFile(fname:string):BOOLEAN;
+function AddTxtFile(fname:string; content:string):BOOLEAN;
 var
-  F:TextFile;
+	F:TextFile;
+	tlist:TStringList;
 begin
-  AssignFile(F, fname); //将文件名与F关联
-  if FileExists(fname) then
-  begin
-    Append(F);
-    Closefile(F); //关闭文件F
-    Result := False;
-  end
-  else
-  begin
-    ReWrite(F); //创建TXT文件，并命名为'fname'
-    Closefile(F); //关闭文件F
-    Result := True;
-  end;
+	if (fname = '') or (content = '') then
+	begin
+		g_disp.DispLog('文件名为空，或者内容为空');
+		Result := False;
+	end;
+
+	AssignFile(F, fname); //将文件名与F关联
+	
+	if FileExists(fname) then
+	begin
+	    Append(F); //追加文件
+	    Closefile(F); //关闭文件F	
+	    g_disp.DispLog('追加文件: ' + ExtractFilePath(ParamStr(0)) + fname);
+	end
+	else
+	begin
+		ReWrite(F); //创建TXT文件，并命名为'fname'
+		Closefile(F); //关闭文件F  
+		g_disp.DispLog('创建文件: ' + ExtractFilePath(ParamStr(0)) + fname);
+	end;
+
+	tlist := TStringList.Create;
+	tlist.LoadFromFile(fname);
+	tlist.Add(content);
+	tlist.SaveToFile(fname);
+	tlist.Free;
+	
+	Result := True;	
 end;
 
 procedure TF_Plc.N_clearClick(Sender: TObject);
@@ -222,20 +238,68 @@ end;
 procedure TF_Plc.btn_uploadClick(Sender: TObject);
 var 
 	fname:string;
+	p, pdata:PByte;
+	len, i:Integer;
+	DI:LongWord;
+	content:string;	
 begin
 	TButton(Sender).Enabled := False;
 
-	fname := strngrd_file_manage.Cells[file_manage_name, strngrd_file_manage.selection.bottom];
+	DLT645_Ctrl := $91;
 
-	if NewTxtFile(fname) = False then
+	DLT645_DI := $F0010100;
+	
+	len := 4;
+
+	P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
+
+	DLT645_Len := DLT645.GetFrameLen();
+
+	CommMakeFrame2(P_DLT645_Frame, DLT645_Len);	
+
+	if F_Main.SendDataAuto()
+		and CommWaitForResp()
+	then
 	begin	
-		g_disp.DispLog('追加文件: ' + ExtractFilePath(ParamStr(0)) + fname);
+		if CommRecved = True then
+    	begin
+    		CommRecved := False;
+    		
+       		p := GetCommRecvBufAddr();
+      		len := GetCommRecvDataLen();   	
+      		
+      		if DLT645.CheckFrame(p, len) = True then
+      		begin
+      			DI := DLT645.GetDI();
+      			pdata := DLT645.GetDataUnit();
+      			len := DLT645.GetDataUnitLen(); 
+
+				for i:=0 to (len - 1) do
+				begin
+					content := content + chr(pdata^);
+					inc(pdata);
+				end;
+
+				fname := strngrd_file_manage.Cells[file_manage_name, strngrd_file_manage.selection.bottom];
+				
+      			AddTxtFile(fname, content);
+      			
+      			g_disp.DispLog('读取文件成功');
+      		end
+      		else
+      		begin
+      			g_disp.DispLog('读取文件失败');
+      		end;
+	    end
+	    else
+	    begin
+	      g_disp.DispLog('串口接收无数据');
+	    end;      		
 	end
 	else
-	begin
-		g_disp.DispLog('创建文件: ' + ExtractFilePath(ParamStr(0)) + fname);
+	begin	
+	
 	end;
-
 	TButton(Sender).Enabled := True;
 end;
 
