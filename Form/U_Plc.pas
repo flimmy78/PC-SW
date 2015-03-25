@@ -245,13 +245,34 @@ var
 begin
 	TButton(Sender).Enabled := False;
 
+	fname := strngrd_file_manage.Cells[file_manage_name, strngrd_file_manage.selection.bottom];
+
+	if fname = '' then
+	begin
+		g_disp.DispLog('请选择要读取的文件');
+		Beep(); //调用系统声音
+		Abort(); //中止程序的运行
+	end;
+
 	DLT645_Ctrl := $91;
 
 	DLT645_DI := $F0010100;
-	
-	len := 4;
 
-	P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
+	len := length(fname);
+
+	if len <> 12 then
+	begin
+		g_disp.DispLog('文件名.扩展名，总长度为12个字节');
+		Beep(); //调用系统声音
+		Abort(); //中止程序的运行	
+	end;
+
+	for i:=0 to (len - 1) do
+	begin
+		DLT645_Data[i] := ord(fname[i + 1]);
+	end;
+
+	P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, @DLT645_Data[0], len);
 
 	DLT645_Len := DLT645.GetFrameLen();
 
@@ -274,13 +295,18 @@ begin
       			pdata := DLT645.GetDataUnit();
       			len := DLT645.GetDataUnitLen(); 
 
+				for i:=0 to (12 - 1) do
+				begin
+					inc(pdata);
+				end;
+
+				len := len - 12;
+				
 				for i:=0 to (len - 1) do
 				begin
 					content := content + chr(pdata^);
 					inc(pdata);
 				end;
-
-				fname := strngrd_file_manage.Cells[file_manage_name, strngrd_file_manage.selection.bottom];
 				
       			AddTxtFile(fname, content);
       			
