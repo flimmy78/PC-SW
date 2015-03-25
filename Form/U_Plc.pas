@@ -242,8 +242,9 @@ var
 	len, i:Integer;
 	DI:LongWord;
 	content:string;	
+	ctrl:Byte;
 begin
-	TButton(Sender).Enabled := False;
+	//TButton(Sender).Enabled := False;
 
 	fname := strngrd_file_manage.Cells[file_manage_name, strngrd_file_manage.selection.bottom];
 
@@ -254,7 +255,7 @@ begin
 		Abort(); //中止程序的运行
 	end;
 
-	DLT645_Ctrl := $91;
+	DLT645_Ctrl := $11;
 
 	DLT645_DI := $F0010100;
 
@@ -294,21 +295,109 @@ begin
       			DI := DLT645.GetDI();
       			pdata := DLT645.GetDataUnit();
       			len := DLT645.GetDataUnitLen(); 
+      			ctrl := DLT645.GetCtrl();
 
-				for i:=0 to (12 - 1) do
-				begin
-					inc(pdata);
-				end;
+      			case ctrl of
+      				$91:
+      				begin
+						for i:=0 to (12 - 1) do
+						begin
+							inc(pdata);
+						end;
 
-				len := len - 12;
-				
-				for i:=0 to (len - 1) do
-				begin
-					content := content + chr(pdata^);
-					inc(pdata);
-				end;
-				
-      			AddTxtFile(fname, content);
+						len := len - 12;
+						
+						for i:=0 to (len - 1) do
+						begin
+							content := content + chr(pdata^);
+							inc(pdata);
+						end;
+						
+		      			AddTxtFile(fname, content);      				
+      				end;
+
+      				$B1:
+      				begin
+						for i:=0 to (12 - 1) do
+						begin
+							inc(pdata);
+						end;
+
+						len := len - 12;
+						
+						for i:=0 to (len - 1) do
+						begin
+							content := content + chr(pdata^);
+							inc(pdata);
+						end;
+						
+		      			AddTxtFile(fname, content);
+
+		      			while ctrl <> $92 do
+		      			begin
+		      				DLT645_Ctrl := $12;
+
+		      				len := length(fname);
+
+							P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, @DLT645_Data[0], len);
+
+							DLT645_Len := DLT645.GetFrameLen();
+
+							CommMakeFrame2(P_DLT645_Frame, DLT645_Len);	
+
+							if F_Main.SendDataAuto()
+								and CommWaitForResp()
+							then
+							begin	
+								if CommRecved = True then
+						    	begin
+						    		CommRecved := False;
+
+									p := GetCommRecvBufAddr();
+									len := GetCommRecvDataLen();   	
+
+									if DLT645.CheckFrame(p, len) = True then
+									begin
+										DI := DLT645.GetDI();
+										pdata := DLT645.GetDataUnit();
+										len := DLT645.GetDataUnitLen(); 
+										ctrl := DLT645.GetCtrl();
+
+										for i:=0 to (12 - 1) do
+										begin
+											inc(pdata);
+										end;
+
+										len := len - 12;
+
+										for i:=0 to (len - 2) do
+										begin
+											content := content + chr(pdata^);
+											inc(pdata);
+										end;
+
+										AddTxtFile(fname, content);   
+									end
+									else
+									begin
+										Abort(); //中止程序的运行
+									end;
+						    	end
+						    	else
+						    	begin
+						    		Abort(); //中止程序的运行
+						    	end;
+						    end
+						    else
+						    begin
+						    	Abort(); //中止程序的运行
+						    end;		      				
+		      			end;
+      				end;
+      				else
+      				begin
+      				end;
+      			end;	
       			
       			g_disp.DispLog('读取文件成功');
       		end

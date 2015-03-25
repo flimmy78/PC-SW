@@ -16,6 +16,7 @@ const
     INVALID_DI = $ffffffff;
 
     ctrl_read_07  =  $11;//读数据
+    ctrl_ext_read_07  =  $12;//读数据
     ctrl_write_07 =  $14;//写数据
 
     ctrl_read_97  =  $01;//读数据
@@ -49,6 +50,7 @@ type
     function MakeFrame_645(ctrl:Byte; DI:LongWord; pData:PByte=nil; datalen:Integer=0):PByte;override;
     function CheckFrame(pBuf:PByte;len:Integer):Boolean;override;
     function GetDI():LongWord;override;
+    function GetCtrl():Byte;override;
     function GetDataUnit():PByte;override;
     function GetDataUnitLen():Integer;override;
     function GetFrameBuf():PByte;override;     //获取的是正确帧的地址
@@ -103,7 +105,8 @@ begin
         MoveMemory(@buf[p], @DI, 2);  Inc(p, 2);
       end;
       ctrl_read_07,
-      ctrl_write_07:
+      ctrl_write_07,
+      ctrl_ext_read_07:
       begin
         MoveMemory(@buf[p], @DI, 4);  Inc(p, 4);
       end;
@@ -176,7 +179,8 @@ begin
     Result := INVALID_DI;
     case (m_pFrame.m_ctrl and $1f) of
       ctrl_read_07,
-      ctrl_write_07:
+      ctrl_write_07,
+      ctrl_ext_read_07:
       begin
         if m_pFrame.m_dataLen >= 4 then
         begin
@@ -198,12 +202,18 @@ begin
     end;
 end;
 
+function T_Protocol_645.GetCtrl():Byte;
+begin
+    Result := m_pFrame.m_ctrl;
+end;
+
 function T_Protocol_645.GetDataUnit():PByte;
 begin
     Result := @m_pFrame.m_dataBuf[0];
     case (m_pFrame.m_ctrl and $1f) of
       ctrl_read_07,
-      ctrl_write_07:
+      ctrl_write_07,
+      ctrl_ext_read_07:
       begin
         if m_pFrame.m_dataLen >= 4 then
         begin
@@ -229,7 +239,8 @@ begin
     Result := m_pFrame.m_dataLen;
     case (m_pFrame.m_ctrl and $1f) of
       ctrl_read_07,
-      ctrl_write_07:
+      ctrl_write_07,
+      ctrl_ext_read_07:
       begin
           Inc(Result,-4);
       end;

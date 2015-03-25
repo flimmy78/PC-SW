@@ -176,6 +176,7 @@ type
     
     //以下645专业
     function GetDI():LongWord;virtual;        //返回645规约的数据标识符，或者国电规约的数据单元标识
+    function GetCtrl():Byte;virtual;
     function MakeFrame_645(ctrl:Byte; DI:LongWord; pData:PByte=nil; datalen:Integer=0):PByte;virtual;
 
     function mb_crc16(ucFrame:PByte; iLen:Integer):word;
@@ -436,6 +437,11 @@ begin
 end;
 
 function T_Protocol.GetDI():LongWord;
+begin
+    Result := m_buf[1];
+end;
+
+function T_Protocol.GetCtrl():Byte;
 begin
     Result := m_buf[1];
 end;
