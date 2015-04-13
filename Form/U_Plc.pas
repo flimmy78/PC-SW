@@ -126,6 +126,7 @@ end;
 function AddTxtFile(fname:string; content:string):BOOLEAN;
 var
 	F:TextFile;
+	i, len:Integer;
 	tlist:TStringList;
 begin
 	if (fname = '') or (content = '') then
@@ -135,25 +136,33 @@ begin
 	end;
 
 	AssignFile(F, fname); //将文件名与F关联
+	len := Length(content); 
 	
 	if FileExists(fname) then
 	begin
 	    Append(F); //追加文件
-	    Closefile(F); //关闭文件F	
 	    g_disp.DispLog('追加文件: ' + ExtractFilePath(ParamStr(0)) + fname);
 	end
 	else
 	begin
 		ReWrite(F); //创建TXT文件，并命名为'fname'
-		Closefile(F); //关闭文件F  
 		g_disp.DispLog('创建文件: ' + ExtractFilePath(ParamStr(0)) + fname);
 	end;
 
+	for i := 0 to (len - 1) do
+	begin
+		Write(F, content[i + 1]);
+	end;
+    
+    Closefile(F); //关闭文件F	
+    
+{
 	tlist := TStringList.Create;
 	tlist.LoadFromFile(fname);
 	tlist.Add(content);
 	tlist.SaveToFile(fname);
 	tlist.Free;
+}
 	
 	Result := True;	
 end;
@@ -306,7 +315,8 @@ begin
 						end;
 
 						len := len - 12;
-						
+
+						content := '';
 						for i:=0 to (len - 1) do
 						begin
 							content := content + chr(pdata^);
@@ -324,7 +334,8 @@ begin
 						end;
 
 						len := len - 12;
-						
+
+						content := '';
 						for i:=0 to (len - 1) do
 						begin
 							content := content + chr(pdata^);
@@ -354,7 +365,7 @@ begin
 						    		CommRecved := False;
 
 									p := GetCommRecvBufAddr();
-									len := GetCommRecvDataLen();   	
+									len := GetCommRecvDataLen();  	
 
 									if DLT645.CheckFrame(p, len) = True then
 									begin
@@ -370,6 +381,7 @@ begin
 
 										len := len - 12;
 
+										content := '';
 										for i:=0 to (len - 2) do
 										begin
 											content := content + chr(pdata^);
