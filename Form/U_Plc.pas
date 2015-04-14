@@ -31,7 +31,7 @@ type
     { Private declarations }
   public
     { Public declarations }
-    function strngrd_file_manage_Display(strConten:string):Boolean;
+    function strngrd_file_manage_Display(fname:string; fsize:string):Boolean;
     function strngrd_file_manage_Clear():Boolean;
   end;
 
@@ -64,14 +64,10 @@ begin
     DLT645 := T_Protocol_645.Create();
 end;
 
-function TF_Plc.strngrd_file_manage_Display(strConten:string):Boolean;
+function TF_Plc.strngrd_file_manage_Display(fname:string; fsize:string):Boolean;
 var 
-	t:SYSTEMTIME;
-    strTime:string;
     nRow:Integer;
 begin
-    GetLocalTime(t);
-    strTime := Format('%.2d:%.2d:%.2d %.3d',[t.wHour,t.wMinute,t.wSecond,t.wMilliseconds]);
     nRow := strngrd_file_manage.RowCount - 1;
     
     if strngrd_file_manage.Cells[file_manage_name, nRow] <> '' then
@@ -79,9 +75,9 @@ begin
         Inc(nRow);
         strngrd_file_manage.RowCount := nRow + 1;
     end;
-    
-    strngrd_file_manage.Cells[file_manage_size, nRow] := strTime;
-    strngrd_file_manage.Cells[file_manage_name, nRow] := strConten;
+
+    strngrd_file_manage.Cells[file_manage_name, nRow] := fname;
+    strngrd_file_manage.Cells[file_manage_size, nRow] := fsize;
     
     if N_scroll.Checked then
     begin
@@ -175,9 +171,9 @@ end;
 procedure TF_Plc.btn_syncClick(Sender: TObject);
 var
 	p, pdata:PByte;
-	len, i:Integer;
+	len, i, size:Integer;
 	DI:LongWord;
-	str:string;
+	fname, fsize:string;
 begin
 	TButton(Sender).Enabled := False;
 
@@ -216,13 +212,28 @@ begin
       			inc(pdata);
       			len := len - 4;
 
-				for i:=0 to (len - 1) do
+				while len > 0 do
 				begin
-					str := str + chr(pdata^);
-					inc(pdata);
+					fname := '';
+					for i:=0 to 11 do
+					begin
+						fname := fname + chr(pdata^);
+						inc(pdata);
+					end;
+
+					size := 0;
+					fsize := '';
+					for i:=0 to 3 do
+					begin
+						size := size + (pdata^ shl (i * 8));
+						inc(pdata);
+					end;
+					fsize := IntToStr(size) + ' Bytes';
+
+					len := len - 16;
+					
+	      			strngrd_file_manage_Display(fname, fsize);
 				end;
-				
-      			strngrd_file_manage_Display(str);
       			
       			g_disp.DispLog('同步成功');
       		end
@@ -253,7 +264,7 @@ var
 	content:string;	
 	ctrl:Byte;
 begin
-	//TButton(Sender).Enabled := False;
+	TButton(Sender).Enabled := False;
 
 	fname := strngrd_file_manage.Cells[file_manage_name, strngrd_file_manage.selection.bottom];
 
