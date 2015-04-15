@@ -1,6 +1,6 @@
 object F_Key: TF_Key
-  Left = 300
-  Top = 331
+  Left = 354
+  Top = 181
   Align = alClient
   BorderStyle = bsNone
   Caption = #38053#21273
@@ -28,7 +28,7 @@ object F_Key: TF_Key
     TabOrder = 0
     object scrlbx1: TGroupBox
       Left = 20
-      Top = 16
+      Top = 14
       Width = 397
       Height = 392
       TabOrder = 0
@@ -119,7 +119,7 @@ object F_Key: TF_Key
     end
     object scrlbx2: TGroupBox
       Left = 438
-      Top = 16
+      Top = 14
       Width = 387
       Height = 392
       TabOrder = 1
@@ -179,7 +179,7 @@ object F_Key: TF_Key
     end
     object scrlbx3: TGroupBox
       Left = 846
-      Top = 16
+      Top = 14
       Width = 485
       Height = 392
       TabOrder = 2

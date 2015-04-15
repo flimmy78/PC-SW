@@ -26,7 +26,7 @@ object F_Noise: TF_Noise
     TabOrder = 0
     object scrlbx1: TGroupBox
       Left = 20
-      Top = 16
+      Top = 14
       Width = 397
       Height = 392
       Caption = #36890#36947#36873#25321#21306
@@ -77,7 +77,7 @@ object F_Noise: TF_Noise
     end
     object scrlbx2: TGroupBox
       Left = 438
-      Top = 16
+      Top = 14
       Width = 491
       Height = 392
       Caption = #20889#21442#25968#21306

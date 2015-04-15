@@ -26,7 +26,7 @@ object F_Temp: TF_Temp
     TabOrder = 0
     object scrlbx1: TGroupBox
       Left = 20
-      Top = 16
+      Top = 14
       Width = 397
       Height = 392
       TabOrder = 0
@@ -489,7 +489,7 @@ object F_Temp: TF_Temp
     end
     object scrlbx2: TGroupBox
       Left = 438
-      Top = 16
+      Top = 14
       Width = 387
       Height = 392
       TabOrder = 1
@@ -676,7 +676,7 @@ object F_Temp: TF_Temp
     end
     object scrlbx3: TGroupBox
       Left = 846
-      Top = 16
+      Top = 14
       Width = 485
       Height = 392
       TabOrder = 2

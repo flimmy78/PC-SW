@@ -28,7 +28,7 @@ object F_PDA: TF_PDA
     TabOrder = 0
     object grp1: TGroupBox
       Left = 20
-      Top = 16
+      Top = 14
       Width = 1311
       Height = 392
       Caption = #25991#20214#31649#29702
