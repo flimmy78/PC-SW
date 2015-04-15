@@ -39,7 +39,7 @@ uses
   U_Key in 'U_Key.pas' {F_Key},
   U_Temp in 'U_Temp.pas' {F_Temp},
   U_Noise in 'U_Noise.pas' {F_Noise},
-  U_Plc in 'U_Plc.pas' {F_Plc};
+  U_PDA in 'U_PDA.pas' {F_PDA};
 
 {$R *.res}
 
@@ -50,6 +50,6 @@ begin
   Application.CreateForm(TF_Key, F_Key);
   Application.CreateForm(TF_Temp, F_Temp);
   Application.CreateForm(TF_Noise, F_Noise);
-  Application.CreateForm(TF_Plc, F_Plc);
+  Application.CreateForm(TF_PDA, F_PDA);
   Application.Run;
 end.

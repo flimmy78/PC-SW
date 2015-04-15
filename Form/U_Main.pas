@@ -61,7 +61,7 @@ type
     ts_key: TTabSheet;
     ts_temp: TTabSheet;
     ts_noise: TTabSheet;
-    ts_plc: TTabSheet;
+    ts_pda: TTabSheet;
     procedure cbb_ConnModeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnConnClick(Sender: TObject);
@@ -137,13 +137,13 @@ type
 var
   F_Main: TF_Main;
 
-const Version = 'v2015.04.14';
+const Version = 'v2015.04.15';
 
 implementation
 
 uses U_Update,U_ParseFrame, U_Debug, U_Debug_Con, U_Operation,U_Frame, U_Sel_Protocol,
      U_Param_Mod, U_Param_Con, U_Param_ChkMeter,U_Update_Con_Mod,U_Param_Con_Mod,
-  U_Debug_Con_Mod, U_Container, U_Key, U_Temp, U_Noise, U_Plc;
+  U_Debug_Con_Mod, U_Container, U_Key, U_Temp, U_Noise, U_PDA;
 
 {$R *.dfm}
 
@@ -366,10 +366,10 @@ begin
         ts_frame.TabVisible := True;
     end;
 
-    if F_Plc<>nil then
+    if F_PDA<>nil then
     begin
-        F_Plc.Parent            := ts_plc;              F_Plc.Show;
-        ts_plc.TabVisible := True;
+        F_PDA.Parent            := ts_pda;              F_PDA.Show;
+        ts_pda.TabVisible := True;
     end;
 
     for i:=pgc1.PageCount-1 downto 0 do

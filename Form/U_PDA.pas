@@ -1,4 +1,4 @@
-unit U_Plc;
+unit U_PDA;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   U_Protocol_645, U_Multi, U_Disp, U_Main;
 
 type
-  TF_Plc = class(TForm)
+  TF_PDA = class(TForm)
     scrlbx1: TScrollBox;
     grp1: TGroupBox;
     pnl1: TPanel;
@@ -36,7 +36,7 @@ type
   end;
 
 var
-  F_Plc: TF_Plc;
+  F_PDA: TF_PDA;
   DLT645:T_Protocol_645;
   P_DLT645_Frame:PByte;
   DLT645_Ctrl:Byte;
@@ -52,7 +52,7 @@ const file_manage_null = 0;
       file_manage_name = 1;
       file_manage_size = 2;
 
-procedure TF_Plc.FormCreate(Sender: TObject);
+procedure TF_PDA.FormCreate(Sender: TObject);
 begin
     inherited;
     strngrd_file_manage.ColWidths[file_manage_null] := 0;
@@ -64,7 +64,7 @@ begin
     DLT645 := T_Protocol_645.Create();
 end;
 
-function TF_Plc.strngrd_file_manage_Display(fname:string; fsize:string):Boolean;
+function TF_PDA.strngrd_file_manage_Display(fname:string; fsize:string):Boolean;
 var 
     nRow:Integer;
 begin
@@ -85,13 +85,13 @@ begin
     end;
 end;
 
-function TF_Plc.strngrd_file_manage_Clear():Boolean;
+function TF_PDA.strngrd_file_manage_Clear():Boolean;
 begin
     strngrd_file_manage.RowCount := 2;
     strngrd_file_manage.Rows[1].Clear;
 end;
     
-procedure TF_Plc.strngrd_file_manage_DrawCell(Sender: TObject; ACol,
+procedure TF_PDA.strngrd_file_manage_DrawCell(Sender: TObject; ACol,
   ARow: Integer; Rect: TRect; State: TGridDrawState);
 begin
     if (gdSelected in State) or (ARow=0) then Exit;
@@ -110,7 +110,7 @@ begin
     end;
 end;
 
-procedure TF_Plc.strngrd_file_manage_KeyDown(Sender: TObject; var Key: Word;
+procedure TF_PDA.strngrd_file_manage_KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
     if ssCtrl in Shift then
@@ -119,7 +119,35 @@ begin
         end;
 end;
 
-function AddTxtFile(fname:string; content:string):BOOLEAN;
+function FileCreate(fname:string; content:string):BOOLEAN;
+var
+	F:TextFile;
+	i, len:Integer;
+begin
+	if (fname = '') or (content = '') then
+	begin
+		g_disp.DispLog('文件名为空，或者内容为空');
+		Beep(); //调用系统声音
+		Result := False;
+	end;
+
+	AssignFile(F, fname); //将文件名与F关联
+	len := Length(content); 
+
+	ReWrite(F); //创建文件，并命名为'fname'
+	g_disp.DispLog('创建文件: ' + ExtractFilePath(ParamStr(0)) + fname);
+	
+	for i := 0 to (len - 1) do
+	begin
+		Write(F, content[i + 1]);
+	end;
+
+    Closefile(F); //关闭文件F	
+	
+	Result := True;	
+end;
+
+function FileAppend(fname:string; content:string):BOOLEAN;
 var
 	F:TextFile;
 	i, len:Integer;
@@ -128,11 +156,12 @@ begin
 	if (fname = '') or (content = '') then
 	begin
 		g_disp.DispLog('文件名为空，或者内容为空');
+		Beep(); //调用系统声音
 		Result := False;
 	end;
 
 	AssignFile(F, fname); //将文件名与F关联
-	len := Length(content); 
+	len := Length(content);
 	
 	if FileExists(fname) then
 	begin
@@ -141,15 +170,16 @@ begin
 	end
 	else
 	begin
-		ReWrite(F); //创建TXT文件，并命名为'fname'
-		g_disp.DispLog('创建文件: ' + ExtractFilePath(ParamStr(0)) + fname);
-	end;
+		Closefile(F); //关闭文件F
+		g_disp.DispLog('文件不存在');
+		Result := False;
+	end; 
 
 	for i := 0 to (len - 1) do
 	begin
 		Write(F, content[i + 1]);
 	end;
-    
+
     Closefile(F); //关闭文件F	
     
 {
@@ -163,12 +193,12 @@ begin
 	Result := True;	
 end;
 
-procedure TF_Plc.N_clearClick(Sender: TObject);
+procedure TF_PDA.N_clearClick(Sender: TObject);
 begin
     strngrd_file_manage_Clear();
 end;
 
-procedure TF_Plc.btn_syncClick(Sender: TObject);
+procedure TF_PDA.btn_syncClick(Sender: TObject);
 var
 	p, pdata:PByte;
 	len, i, size:Integer;
@@ -176,6 +206,8 @@ var
 	fname, fsize:string;
 begin
 	TButton(Sender).Enabled := False;
+
+	strngrd_file_manage_Clear();
 
 	DLT645_Ctrl := $91;
 
@@ -228,7 +260,7 @@ begin
 						size := size + (pdata^ shl (i * 8));
 						inc(pdata);
 					end;
-					fsize := IntToStr(size) + ' Bytes';
+					fsize := IntToStr(size) + '  Bytes';
 
 					len := len - 16;
 					
@@ -255,7 +287,7 @@ begin
 	TButton(Sender).Enabled := True;
 end;
 
-procedure TF_Plc.btn_uploadClick(Sender: TObject);
+procedure TF_PDA.btn_uploadClick(Sender: TObject);
 var 
 	fname:string;
 	p, pdata:PByte;
@@ -272,6 +304,7 @@ begin
 	begin
 		g_disp.DispLog('请选择要读取的文件');
 		Beep(); //调用系统声音
+		TButton(Sender).Enabled := True;
 		Abort(); //中止程序的运行
 	end;
 
@@ -285,6 +318,7 @@ begin
 	begin
 		g_disp.DispLog('文件名.扩展名，总长度为12个字节');
 		Beep(); //调用系统声音
+		TButton(Sender).Enabled := True;
 		Abort(); //中止程序的运行	
 	end;
 
@@ -334,7 +368,7 @@ begin
 							inc(pdata);
 						end;
 						
-		      			AddTxtFile(fname, content);      				
+		      			FileCreate(fname, content);      				
       				end;
 
       				$B1:
@@ -353,7 +387,7 @@ begin
 							inc(pdata);
 						end;
 						
-		      			AddTxtFile(fname, content);
+		      			FileCreate(fname, content);
 
 		      			while ctrl <> $92 do
 		      			begin
@@ -399,20 +433,26 @@ begin
 											inc(pdata);
 										end;
 
-										AddTxtFile(fname, content);   
+										FileAppend(fname, content);   
 									end
 									else
 									begin
+										g_disp.DispLog('读取文件失败');
+										TButton(Sender).Enabled := True;
 										Abort(); //中止程序的运行
 									end;
 						    	end
 						    	else
 						    	begin
+						    		g_disp.DispLog('读取文件失败');
+						    		TButton(Sender).Enabled := True;
 						    		Abort(); //中止程序的运行
 						    	end;
 						    end
 						    else
 						    begin
+						    	g_disp.DispLog('读取文件失败');
+						    	TButton(Sender).Enabled := True;
 						    	Abort(); //中止程序的运行
 						    end;		      				
 		      			end;

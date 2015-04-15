@@ -1,9 +1,9 @@
-object F_Plc: TF_Plc
+object F_PDA: TF_PDA
   Left = 382
   Top = 184
   Align = alClient
   BorderStyle = bsNone
-  Caption = #30005#21147#25220#34920#25484#26426
+  Caption = #25484#26426
   ClientHeight = 442
   ClientWidth = 912
   Color = clBtnFace

@@ -267,7 +267,7 @@ object F_Main: TF_Main
         Top = 0
         Width = 1071
         Height = 255
-        ActivePage = ts_plc
+        ActivePage = ts_pda
         Align = alClient
         TabOrder = 0
         object ts_update: TTabSheet
@@ -314,8 +314,8 @@ object F_Main: TF_Main
           Caption = #22122#22768#26657#20934
           ImageIndex = 10
         end
-        object ts_plc: TTabSheet
-          Caption = #30005#21147#25220#34920#25484#26426
+        object ts_pda: TTabSheet
+          Caption = #25484#26426
           ImageIndex = 11
         end
       end
