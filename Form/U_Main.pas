@@ -51,6 +51,7 @@ type
     ts_frame: TTabSheet;
     pnl4: TPanel;
     txt_sel_protocol: TStaticText;
+    spl2: TSplitter;
     lbl7: TLabel;
     edt_timeout: TEdit;
     ts_meter_file: TTabSheet;
