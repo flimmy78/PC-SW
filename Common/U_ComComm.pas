@@ -41,8 +41,8 @@ type
     //m_protocol:TProtocol;//协议类型
     m_frame_interval : Integer;
     function SetHandle(lwHandle:LongWord):Boolean;
-    function IniCom(nPort,nBaudRate:integer;nParity:integer=NOPARITY;nStopBits:integer=ONESTOPBIT;nDataBits:integer=8):Boolean;
-    function SetComParam(nBaudRate:integer;nParity:integer=NOPARITY;nStopBits:integer=ONESTOPBIT;nDataBits:integer=8):Boolean;
+    function IniCom(nPort,nBaudRate:integer;nParity:integer=NOPARITY;nDataBits:integer=8;nStopBits:integer=ONESTOPBIT):Boolean;
+    function SetComParam(nBaudRate:integer;nParity:integer=NOPARITY;nDataBits:integer=8;nStopBits:integer=ONESTOPBIT):Boolean;
     function WriteCom(nHandle:integer;sendBuffer:PByte;nNumberOfBytesToWrite:DWORD):DWORD;
     function UniniCom():Boolean;
     function IsComOpen():Boolean;
@@ -96,7 +96,7 @@ begin
     m_frame_interval := 40;//适合300波特率，分帧
 end;
 
-function TO_ComComm.IniCom(nPort,nBaudRate:integer;nParity:integer=NOPARITY;nStopBits:integer=ONESTOPBIT;nDataBits:integer=8):Boolean;
+function TO_ComComm.IniCom(nPort,nBaudRate:integer;nParity:integer=NOPARITY;nDataBits:integer=8;nStopBits:integer=ONESTOPBIT):Boolean;
 var lpdcb:Tdcb;
     pcCom:pchar;
 begin
@@ -150,7 +150,7 @@ begin
         Resume();
 end;
 
-function TO_ComComm.SetComParam(nBaudRate:integer;nParity:integer=NOPARITY;nStopBits:integer=ONESTOPBIT;nDataBits:integer=8):Boolean;
+function TO_ComComm.SetComParam(nBaudRate:integer;nParity:integer=NOPARITY;nDataBits:integer=8;nStopBits:integer=ONESTOPBIT):Boolean;
 var lpdcb:Tdcb;
 begin
     Result := False;

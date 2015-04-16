@@ -51,7 +51,7 @@ object F_Main: TF_Main
         Caption = #36890#35759#35774#32622
       end
       object lbl7: TLabel
-        Left = 571
+        Left = 672
         Top = 17
         Width = 24
         Height = 12
@@ -61,7 +61,7 @@ object F_Main: TF_Main
       object cbb_ConnMode: TComboBox
         Left = 71
         Top = 13
-        Width = 66
+        Width = 60
         Height = 20
         Style = csDropDownList
         Enabled = False
@@ -77,9 +77,9 @@ object F_Main: TF_Main
           'GPRS'#23458#25143#31471)
       end
       object cbb_Comm: TComboBox
-        Left = 138
+        Left = 131
         Top = 13
-        Width = 55
+        Width = 60
         Height = 20
         Style = csDropDownList
         ImeName = #20013#25991' ('#31616#20307') - '#25628#29399#25340#38899#36755#20837#27861
@@ -99,33 +99,35 @@ object F_Main: TF_Main
           'COM9')
       end
       object cbb_Baudrate: TComboBox
-        Left = 194
+        Left = 190
         Top = 13
         Width = 60
         Height = 20
         Style = csDropDownList
         ImeName = #20013#25991' ('#31616#20307') - '#25628#29399#25340#38899#36755#20837#27861
         ItemHeight = 12
-        ItemIndex = 6
+        ItemIndex = 9
         TabOrder = 2
         Text = '9600'
         Items.Strings = (
+          '50'
+          '75'
+          '100'
+          '150'
           '300'
           '600'
           '1200'
           '2400'
           '4800'
-          '7200'
           '9600'
           '19200'
           '38400'
+          '56000'
           '57600'
-          '76800'
-          '115200'
-          '153600')
+          '115200')
       end
       object btnConn: TBitBtn
-        Left = 743
+        Left = 791
         Top = 13
         Width = 75
         Height = 22
@@ -134,7 +136,7 @@ object F_Main: TF_Main
         OnClick = btnConnClick
       end
       object btnDisConn: TBitBtn
-        Left = 838
+        Left = 886
         Top = 13
         Width = 75
         Height = 22
@@ -144,7 +146,7 @@ object F_Main: TF_Main
         OnClick = btnDisConnClick
       end
       object btn_stop: TBitBtn
-        Left = 1028
+        Left = 1076
         Top = 13
         Width = 75
         Height = 22
@@ -154,7 +156,7 @@ object F_Main: TF_Main
         OnClick = btn_stopClick
       end
       object btn_Clear: TBitBtn
-        Left = 933
+        Left = 981
         Top = 13
         Width = 75
         Height = 22
@@ -163,9 +165,9 @@ object F_Main: TF_Main
         OnClick = btn_ClearClick
       end
       object cbb_Parity: TComboBox
-        Left = 255
+        Left = 249
         Top = 13
-        Width = 74
+        Width = 92
         Height = 20
         Style = csDropDownList
         ImeName = #20013#25991' ('#31616#20307') - '#25628#29399#25340#38899#36755#20837#27861
@@ -181,7 +183,7 @@ object F_Main: TF_Main
           'SPACEPARITY')
       end
       object txt1: TStaticText
-        Left = 449
+        Left = 529
         Top = 17
         Width = 52
         Height = 16
@@ -190,7 +192,7 @@ object F_Main: TF_Main
         Visible = False
       end
       object edt_con_addr: TEdit
-        Left = 502
+        Left = 582
         Top = 13
         Width = 63
         Height = 20
@@ -233,7 +235,7 @@ object F_Main: TF_Main
         end
       end
       object edt_timeout: TEdit
-        Left = 599
+        Left = 700
         Top = 13
         Width = 49
         Height = 20
@@ -243,6 +245,39 @@ object F_Main: TF_Main
         Text = '30'
         Visible = False
         OnKeyUp = edt_timeoutKeyUp
+      end
+      object cbb_DataBits: TComboBox
+        Left = 340
+        Top = 13
+        Width = 60
+        Height = 20
+        Style = csDropDownList
+        ImeName = #20013#25991' ('#31616#20307') - '#25628#29399#25340#38899#36755#20837#27861
+        ItemHeight = 12
+        ItemIndex = 3
+        TabOrder = 12
+        Text = '8'
+        Items.Strings = (
+          '5'
+          '6'
+          '7'
+          '8')
+      end
+      object cbb_StopBits: TComboBox
+        Left = 399
+        Top = 13
+        Width = 98
+        Height = 20
+        Style = csDropDownList
+        ImeName = #20013#25991' ('#31616#20307') - '#25628#29399#25340#38899#36755#20837#27861
+        ItemHeight = 12
+        ItemIndex = 0
+        TabOrder = 13
+        Text = 'ONESTOPBIT'
+        Items.Strings = (
+          'ONESTOPBIT'
+          'ONE5STOPBITS'
+          'TWOSTOPBITS')
       end
     end
     object pnl3: TPanel

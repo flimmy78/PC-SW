@@ -51,7 +51,6 @@ type
     ts_frame: TTabSheet;
     pnl4: TPanel;
     txt_sel_protocol: TStaticText;
-    spl2: TSplitter;
     lbl7: TLabel;
     edt_timeout: TEdit;
     ts_meter_file: TTabSheet;
@@ -62,6 +61,8 @@ type
     ts_temp: TTabSheet;
     ts_noise: TTabSheet;
     ts_pda: TTabSheet;
+    cbb_DataBits: TComboBox;
+    cbb_StopBits: TComboBox;
     procedure cbb_ConnModeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnConnClick(Sender: TObject);
@@ -137,7 +138,7 @@ type
 var
   F_Main: TF_Main;
 
-const Version = 'v2015.04.15';
+const Version = 'v2015.04.16';
 
 implementation
 
@@ -472,13 +473,14 @@ begin
 end;
 
 procedure TF_Main.btnConnClick(Sender: TObject);
-var nPort,nBaud:Integer;
+var nPort,nBaud,nDataBits:Integer;
 begin
     if cbb_ConnMode.ItemIndex = conn_mode_comm then
     begin
         nPort := cbb_Comm.ItemIndex+1;
         nBaud := StrToInt(cbb_Baudrate.Text);
-        if O_ComComm.IniCom(nPort,nBaud,cbb_Parity.ItemIndex) then
+        nDataBits := StrToInt(cbb_DataBits.Text);
+        if O_ComComm.IniCom(nPort,nBaud,cbb_Parity.ItemIndex,nDataBits,cbb_StopBits.ItemIndex) then
         begin
             O_ComComm.SetFrameInterval(100);
             O_ComComm.WriteCom(Handle,nil,0);
