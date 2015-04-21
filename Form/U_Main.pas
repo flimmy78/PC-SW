@@ -490,6 +490,8 @@ begin
             cbb_Comm.Enabled := False;
             cbb_Baudrate.Enabled := False;
             cbb_Parity.Enabled := False;
+            cbb_DataBits.Enabled := False;
+            cbb_StopBits.Enabled := False;
             btnDisConn.Enabled  := True;
             g_disp.DispLog('打开串口成功');
         end
@@ -638,6 +640,8 @@ begin
         cbb_Comm.Enabled := True;
         cbb_Baudrate.Enabled := True;
         cbb_Parity.Enabled := True;
+        cbb_DataBits.Enabled := True;
+        cbb_StopBits.Enabled := True;
         g_disp.DispLog('关闭串口');
     end
     else if cbb_ConnMode.ItemIndex = conn_mode_tcp_server then
