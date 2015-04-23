@@ -42,7 +42,7 @@ object F_PDA: TF_PDA
         BevelOuter = bvNone
         TabOrder = 0
         object btn_upload: TBitBtn
-          Left = 779
+          Left = 856
           Top = 8
           Width = 75
           Height = 25
@@ -51,13 +51,22 @@ object F_PDA: TF_PDA
           OnClick = btn_uploadClick
         end
         object btn_sync: TBitBtn
-          Left = 462
+          Left = 385
           Top = 8
           Width = 75
           Height = 25
           Caption = #21516#27493
           TabOrder = 1
           OnClick = btn_syncClick
+        end
+        object btn_shake_hands: TBitBtn
+          Left = 621
+          Top = 8
+          Width = 75
+          Height = 25
+          Caption = #25569#25163
+          TabOrder = 2
+          OnClick = btn_shake_handsClick
         end
       end
       object strngrd_file_manage: TStringGrid

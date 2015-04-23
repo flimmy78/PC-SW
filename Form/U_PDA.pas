@@ -19,6 +19,7 @@ type
     N_scroll: TMenuItem;
     N2: TMenuItem;
     N_clear: TMenuItem;
+    btn_shake_hands: TBitBtn;
     procedure FormCreate(Sender: TObject);
     procedure strngrd_file_manage_DrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
@@ -27,6 +28,7 @@ type
     procedure N_clearClick(Sender: TObject);
     procedure btn_syncClick(Sender: TObject);
     procedure btn_uploadClick(Sender: TObject);
+    procedure btn_shake_handsClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -200,16 +202,16 @@ end;
 
 procedure TF_PDA.btn_syncClick(Sender: TObject);
 var
+	fname, fsize:string;
 	p, pdata:PByte;
 	len, i, size:Integer;
 	DI:LongWord;
-	fname, fsize:string;
 begin
 	TButton(Sender).Enabled := False;
 
 	strngrd_file_manage_Clear();
 
-	DLT645_Ctrl := $91;
+	DLT645_Ctrl := $11;
 
 	DLT645_DI := $F0000100;
 	
@@ -289,12 +291,11 @@ end;
 
 procedure TF_PDA.btn_uploadClick(Sender: TObject);
 var 
-	fname:string;
+	fname, content:string;
 	p, pdata:PByte;
+	ctrl:Byte;
 	len, i:Integer;
 	DI:LongWord;
-	content:string;	
-	ctrl:Byte;
 begin
 	TButton(Sender).Enabled := False;
 
@@ -346,10 +347,10 @@ begin
       		
       		if DLT645.CheckFrame(p, len) = True then
       		begin
-      			DI := DLT645.GetDI();
-      			pdata := DLT645.GetDataUnit();
-      			len := DLT645.GetDataUnitLen(); 
-      			ctrl := DLT645.GetCtrl();
+				ctrl := DLT645.GetCtrl();
+				DI := DLT645.GetDI();
+				pdata := DLT645.GetDataUnit();
+				len := DLT645.GetDataUnitLen();
 
       			case ctrl of
       				$91:
@@ -413,11 +414,11 @@ begin
 									len := GetCommRecvDataLen();  	
 
 									if DLT645.CheckFrame(p, len) = True then
-									begin
+									begin 
+										ctrl := DLT645.GetCtrl();
 										DI := DLT645.GetDI();
 										pdata := DLT645.GetDataUnit();
-										len := DLT645.GetDataUnitLen(); 
-										ctrl := DLT645.GetCtrl();
+										len := DLT645.GetDataUnitLen();
 
 										for i:=0 to (12 - 1) do
 										begin
@@ -478,6 +479,70 @@ begin
 	begin	
 	
 	end;
+	TButton(Sender).Enabled := True;
+end;
+
+procedure TF_PDA.btn_shake_handsClick(Sender: TObject);
+var
+	p:PByte;
+	ctrl:Byte;
+	len:Integer;
+	DI:LongWord;
+begin
+	TButton(Sender).Enabled := False;
+
+	DLT645_Ctrl := $11;
+
+	DLT645_DI := $F0000000;
+	
+	len := 4;
+
+	P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
+
+	DLT645_Len := DLT645.GetFrameLen();
+
+	CommMakeFrame2(P_DLT645_Frame, DLT645_Len);
+
+	if F_Main.SendDataAuto()
+		and CommWaitForResp()
+	then
+	begin	
+		if CommRecved = True then
+	    begin
+	    	CommRecved := False;
+	    	
+       		p := GetCommRecvBufAddr();
+      		len := GetCommRecvDataLen();   	
+      		
+      		if DLT645.CheckFrame(p, len) = True then
+      		begin
+      			ctrl := DLT645.GetCtrl();
+      			DI := DLT645.GetDI();
+
+      			if (ctrl = $91) and (DI = $F0000000) then
+      			begin
+      				g_disp.DispLog('握手成功');
+      			end
+      			else
+      			begin
+      				g_disp.DispLog('握手失败');
+      			end;
+      		end	
+	    	else
+	    	begin
+	    		g_disp.DispLog('握手失败');
+	    	end;
+	    end
+	    else
+	    begin
+	    	g_disp.DispLog('串口接收无数据');
+	    end;
+	end  
+	else
+	begin
+	
+	end;  
+
 	TButton(Sender).Enabled := True;
 end;
 

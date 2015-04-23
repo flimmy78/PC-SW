@@ -139,7 +139,7 @@ type
 var
   F_Main: TF_Main;
 
-const Version = 'v2015.04.16';
+const Version = 'v2015.04.23';
 
 implementation
 
@@ -485,14 +485,14 @@ begin
         begin
             O_ComComm.SetFrameInterval(100);
             O_ComComm.WriteCom(Handle,nil,0);
-            btnConn.Enabled     := False;
-            cbb_ConnMode.Enabled:= False;
+            cbb_ConnMode.Enabled := False;
             cbb_Comm.Enabled := False;
             cbb_Baudrate.Enabled := False;
             cbb_Parity.Enabled := False;
             cbb_DataBits.Enabled := False;
             cbb_StopBits.Enabled := False;
-            btnDisConn.Enabled  := True;
+            btnConn.Enabled := False;
+            btnDisConn.Enabled := True;
             g_disp.DispLog('打开串口成功');
         end
         else
@@ -637,6 +637,7 @@ begin
         F_Key.btn_cancel.Click;
         
         O_ComComm.UniniCom;
+        cbb_ConnMode.Enabled := False;
         cbb_Comm.Enabled := True;
         cbb_Baudrate.Enabled := True;
         cbb_Parity.Enabled := True;
@@ -660,9 +661,8 @@ begin
         m_tcpClient.Disconnect;
     end;
 
-    btnConn.Enabled     := True;
-    //cbb_ConnMode.Enabled:= True;
-    btnDisConn.Enabled  := False;
+    btnConn.Enabled := True;
+    btnDisConn.Enabled := False;
 end;
 
 function  TF_Main.DelConnection(ip:string; port:Integer):Boolean;
