@@ -5,21 +5,37 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Buttons, StdCtrls, Spin, Grids, ExtCtrls, Menus, U_MyFunction, U_Protocol, 
-  U_Protocol_645, U_Multi, U_Disp, U_Main;
+  U_Protocol_645, U_Multi, U_Disp, U_Main, ComCtrls, DateUtils;
 
 type
   TF_PDA = class(TForm)
-    scrlbx1: TScrollBox;
-    grp1: TGroupBox;
-    pnl1: TPanel;
-    btn_upload: TBitBtn;
-    strngrd_file_manage: TStringGrid;
-    btn_sync: TBitBtn;
     pm_file_manage: TPopupMenu;
     N_scroll: TMenuItem;
     N2: TMenuItem;
     N_clear: TMenuItem;
+    CheckBox1: TCheckBox;
+    scrlbx1: TScrollBox;
+    grp1: TGroupBox;
+    pnl1: TPanel;
+    btn_upload: TBitBtn;
+    btn_sync: TBitBtn;
     btn_shake_hands: TBitBtn;
+    strngrd_file_manage: TStringGrid;
+    scrlbx3: TGroupBox;
+    btn_restore_defaults: TBitBtn;
+    btn_read_para: TBitBtn;
+    edt_sys_time: TEdit;
+    btn_write_para: TButton;
+    chk_sys_time: TCheckBox;
+    chk_version: TCheckBox;
+    edt_hardware_version: TEdit;
+    lbl1: TLabel;
+    edt_software_version: TEdit;
+    edt_version_date: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    chk_all: TCheckBox;
+    procedure chk_allClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure strngrd_file_manage_DrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
@@ -29,6 +45,9 @@ type
     procedure btn_syncClick(Sender: TObject);
     procedure btn_uploadClick(Sender: TObject);
     procedure btn_shake_handsClick(Sender: TObject);
+    procedure btn_read_paraClick(Sender: TObject);
+    procedure btn_write_paraClick(Sender: TObject);
+    procedure btn_restore_defaultsClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -58,8 +77,8 @@ procedure TF_PDA.FormCreate(Sender: TObject);
 begin
     inherited;
     strngrd_file_manage.ColWidths[file_manage_null] := 0;
-    strngrd_file_manage.ColWidths[file_manage_name] := 650;
-    strngrd_file_manage.ColWidths[file_manage_size] := 650;
+    strngrd_file_manage.ColWidths[file_manage_name] := 402;
+    strngrd_file_manage.ColWidths[file_manage_size] := 391;
     strngrd_file_manage.Cells[file_manage_name, 0]  := '名称';
     strngrd_file_manage.Cells[file_manage_size, 0]  := '大小';
 
@@ -200,6 +219,11 @@ begin
     strngrd_file_manage_Clear();
 end;
 
+procedure TF_PDA.chk_allClick(Sender: TObject);
+begin
+    MakeCheck(TCheckBox(Sender).Parent, TCheckBox(Sender).Checked);
+end;
+
 procedure TF_PDA.btn_syncClick(Sender: TObject);
 var
 	fname, fsize:string;
@@ -215,7 +239,7 @@ begin
 
 	DLT645_DI := $F0000100;
 	
-	len := 4;
+	len := 0;
 
 	P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
 
@@ -495,7 +519,7 @@ begin
 
 	DLT645_DI := $F0000000;
 	
-	len := 4;
+	len := 0;
 
 	P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
 
@@ -531,6 +555,314 @@ begin
 	    	else
 	    	begin
 	    		g_disp.DispLog('握手失败');
+	    	end;
+	    end
+	    else
+	    begin
+	    	g_disp.DispLog('串口接收无数据');
+	    end;
+	end  
+	else
+	begin
+	
+	end;  
+
+	TButton(Sender).Enabled := True;
+end;
+
+procedure TF_PDA.btn_read_paraClick(Sender: TObject);
+var
+  	chk:TCheckBox;
+	p, pdata:PByte;
+	ctrl:Byte;
+	len:Integer;
+	DI:LongWord;  
+	const weekCaption:array[0..6] of string = ('星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
+begin
+	TButton(Sender).Enabled := FALSE;
+	
+	//系统时间
+	chk := chk_sys_time;
+    if chk.Checked then
+    begin
+    	edt_sys_time.Text := '';
+    	
+		DLT645_Ctrl := $11;
+
+		DLT645_DI := $F0100000;
+		
+		len := 0;
+
+		P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
+
+		DLT645_Len := DLT645.GetFrameLen();
+
+		CommMakeFrame2(P_DLT645_Frame, DLT645_Len);
+
+		if F_Main.SendDataAuto()
+			and CommWaitForResp()
+		then
+		begin	
+			if CommRecved = True then
+		    begin
+		    	CommRecved := False;
+		    	
+	       		p := GetCommRecvBufAddr();
+	      		len := GetCommRecvDataLen();   	
+	      		
+	      		if DLT645.CheckFrame(p, len) = True then
+	      		begin
+	      			ctrl := DLT645.GetCtrl();
+	      			DI := DLT645.GetDI();
+					pdata := DLT645.GetDataUnit();
+					len := DLT645.GetDataUnitLen();
+					
+	      			if (ctrl = $91) and (DI = $F0100000) then
+	      			begin
+						edt_sys_time.Text := Format('20%.2x-%.2x-%.2x  %.2x:%.2x:%.2x  %s', [
+											   		PByte(Integer(pdata) + 6)^,
+											   		PByte(Integer(pdata) + 5)^,
+											   		PByte(Integer(pdata) + 4)^,
+											   		PByte(Integer(pdata) + 2)^,
+											   		PByte(Integer(pdata) + 1)^,
+											   		PByte(Integer(pdata) + 0)^,
+											   		weekCaption[PByte(Integer(pdata) + 3)^ mod 7]
+											   		]);
+	      			
+	      				g_disp.DispLog('读系统时间成功');
+	      			end
+	      			else
+	      			begin
+	      				g_disp.DispLog('读系统时间失败');
+	      			end;
+	      		end	
+		    	else
+		    	begin
+		    		g_disp.DispLog('读系统时间失败');
+		    	end;
+		    end
+		    else
+		    begin
+		    	g_disp.DispLog('串口接收无数据');
+		    end;
+		end  
+		else
+		begin
+		
+		end;  
+    end;
+
+	//版本号
+	chk := chk_version;
+    if chk.Checked then
+    begin
+    	edt_hardware_version.Text := '';
+    	edt_software_version.Text := '';
+    	edt_version_date.Text := '';
+
+		DLT645_Ctrl := $11;
+
+		DLT645_DI := $F0100001;
+		
+		len := 0;
+
+		P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
+
+		DLT645_Len := DLT645.GetFrameLen();
+
+		CommMakeFrame2(P_DLT645_Frame, DLT645_Len);
+
+		if F_Main.SendDataAuto()
+			and CommWaitForResp()
+		then
+		begin	
+			if CommRecved = True then
+		    begin
+		    	CommRecved := False;
+		    	
+	       		p := GetCommRecvBufAddr();
+	      		len := GetCommRecvDataLen();   	
+	      		
+	      		if DLT645.CheckFrame(p, len) = True then
+	      		begin
+	      			ctrl := DLT645.GetCtrl();
+	      			DI := DLT645.GetDI();
+					pdata := DLT645.GetDataUnit();
+					len := DLT645.GetDataUnitLen();
+					
+	      			if (ctrl = $91) and (DI = $F0100001) then
+	      			begin
+						edt_hardware_version.Text := Format('v%.d.%.d', [
+															PByte(Integer(pdata) + 0)^ div 10,
+															PByte(Integer(pdata) + 0)^ mod 10
+															]);
+
+						edt_software_version.Text := Format('v%.d.%.d', [
+															PByte(Integer(pdata) + 1)^ div 10,
+															PByte(Integer(pdata) + 1)^ mod 10
+															]);
+
+						edt_version_date.Text := Format('%.4x', [
+														PInteger(Integer(pdata) + 2)^
+														]);
+	      			
+	      				g_disp.DispLog('读版本号成功');
+	      			end
+	      			else
+	      			begin
+	      				g_disp.DispLog('读版本号失败');
+	      			end;
+	      		end	
+		    	else
+		    	begin
+		    		g_disp.DispLog('读版本号失败');
+		    	end;
+		    end
+		    else
+		    begin
+		    	g_disp.DispLog('串口接收无数据');
+		    end;
+		end  
+		else
+		begin
+		
+		end;  
+    end;
+
+	TButton(Sender).Enabled := TRUE;
+end;
+
+procedure TF_PDA.btn_write_paraClick(Sender: TObject);
+var
+	chk:TCheckBox;
+	p:PByte;
+	ctrl:Byte;
+	len, index:Integer;
+	DateTime:TDateTime;
+	buf:array[0..63] of Byte;
+begin
+	TButton(Sender).Enabled := FALSE;
+	
+	//系统时间
+	chk := chk_sys_time;
+    if chk.Checked then
+    begin
+    	DateTime := Now;
+    	
+    	index := 0;
+
+    	buf[index] := SecondOf(DateTime); Inc(index);
+    	buf[index] := MinuteOf(DateTime); Inc(index);
+    	buf[index] := HourOf(DateTime); Inc(index);
+    	buf[index] := DayOfTheWeek(DateTime) mod 7; Inc(index);
+    	buf[index] := DayOf(DateTime); Inc(index);
+    	buf[index] := MonthOf(DateTime); Inc(index);
+    	buf[index] := YearOf(DateTime) - 2000; Inc(index);
+    	
+		DLT645_Ctrl := $14;
+
+		DLT645_DI := $F0110000;
+		
+		len := index;
+
+		P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, @buf[0], len);
+
+		DLT645_Len := DLT645.GetFrameLen();
+
+		CommMakeFrame2(P_DLT645_Frame, DLT645_Len);
+
+		if F_Main.SendDataAuto()
+			and CommWaitForResp()
+		then
+		begin	
+			if CommRecved = True then
+		    begin
+		    	CommRecved := False;
+		    	
+	       		p := GetCommRecvBufAddr();
+	      		len := GetCommRecvDataLen();   	
+	      		
+	      		if DLT645.CheckFrame(p, len) = True then
+	      		begin
+	      			ctrl := DLT645.GetCtrl();
+					
+	      			if ctrl = $94 then
+	      			begin
+	      				g_disp.DispLog('写系统时间成功');
+	      			end
+	      			else
+	      			begin
+	      				g_disp.DispLog('写系统时间失败');
+	      			end;
+	      		end	
+		    	else
+		    	begin
+		    		g_disp.DispLog('写系统时间失败');
+		    	end;
+		    end
+		    else
+		    begin
+		    	g_disp.DispLog('串口接收无数据');
+		    end;
+		end  
+		else
+		begin
+		
+		end;  
+    end;
+
+    TButton(Sender).Enabled := TRUE;
+end;
+
+procedure TF_PDA.btn_restore_defaultsClick(Sender: TObject);
+var
+	p:PByte;
+	ctrl:Byte;
+	len:Integer;
+	DI:LongWord;
+begin
+	TButton(Sender).Enabled := False;
+
+	DLT645_Ctrl := $14;
+
+	DLT645_DI := $F0100100;
+	
+	len := 0;
+
+	P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
+
+	DLT645_Len := DLT645.GetFrameLen();
+
+	CommMakeFrame2(P_DLT645_Frame, DLT645_Len);
+
+	if F_Main.SendDataAuto()
+		and CommWaitForResp()
+	then
+	begin	
+		if CommRecved = True then
+	    begin
+	    	CommRecved := False;
+	    	
+       		p := GetCommRecvBufAddr();
+      		len := GetCommRecvDataLen();   	
+      		
+      		if DLT645.CheckFrame(p, len) = True then
+      		begin
+      			ctrl := DLT645.GetCtrl();
+      			DI := DLT645.GetDI();
+
+      			if  ctrl = $94 then
+      			begin
+      				g_disp.DispLog('恢复出厂成功');
+      			end
+      			else
+      			begin
+      				g_disp.DispLog('恢复出厂失败');
+      			end;
+      		end	
+	    	else
+	    	begin
+	    		g_disp.DispLog('恢复出厂失败');
 	    	end;
 	    end
 	    else
