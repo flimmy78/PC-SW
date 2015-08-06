@@ -58,12 +58,12 @@ type
 
 var
   F_PDA: TF_PDA;
-  DLT645:T_Protocol_645;
-  P_DLT645_Frame:PByte;
-  DLT645_Ctrl:Byte;
-  DLT645_Len:Integer;
-  DLT645_DI:LongWord;
-  DLT645_Data:Array[0..255] of Byte;
+  DL645:T_Protocol_645;
+  P_DL645_Frame:PByte;
+  DL645_Ctrl:Byte;
+  DL645_Len:Integer;
+  DL645_DI:LongWord;
+  DL645_Data:Array[0..255] of Byte;
 
 implementation
 
@@ -82,7 +82,7 @@ begin
     strngrd_file_manage.Cells[file_manage_name, 0]  := '名称';
     strngrd_file_manage.Cells[file_manage_size, 0]  := '大小';
 
-    DLT645 := T_Protocol_645.Create();
+    DL645 := T_Protocol_645.Create();
 end;
 
 function TF_PDA.strngrd_file_manage_Display(fname:string; fsize:string):Boolean;
@@ -235,17 +235,17 @@ begin
 
 	strngrd_file_manage_Clear();
 
-	DLT645_Ctrl := $11;
+	DL645_Ctrl := $11;
 
-	DLT645_DI := $F0000100;
+	DL645_DI := $F0000100;
 	
 	len := 0;
 
-	P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
+	P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, nil, len);
 
-	DLT645_Len := DLT645.GetFrameLen();
+	DL645_Len := DL645.GetFrameLen();
 
-	CommMakeFrame2(P_DLT645_Frame, DLT645_Len);
+	CommMakeFrame2(P_DL645_Frame, DL645_Len);
 
 	if F_Main.SendDataAuto()
 		and CommWaitForResp()
@@ -258,11 +258,11 @@ begin
        		p := GetCommRecvBufAddr();
       		len := GetCommRecvDataLen();   	
       		
-      		if DLT645.CheckFrame(p, len) = True then
+      		if DL645.CheckFrame(p, len) = True then
       		begin
-      			DI := DLT645.GetDI();
-      			pdata := DLT645.GetDataUnit();
-      			len := DLT645.GetDataUnitLen(); 
+      			DI := DL645.GetDI();
+      			pdata := DL645.GetDataUnit();
+      			len := DL645.GetDataUnitLen(); 
 
       			inc(pdata);
       			inc(pdata);
@@ -333,9 +333,9 @@ begin
 		Abort(); //中止程序的运行
 	end;
 
-	DLT645_Ctrl := $11;
+	DL645_Ctrl := $11;
 
-	DLT645_DI := $F0010100;
+	DL645_DI := $F0010100;
 
 	len := length(fname);
 
@@ -349,14 +349,14 @@ begin
 
 	for i:=0 to (len - 1) do
 	begin
-		DLT645_Data[i] := ord(fname[i + 1]);
+		DL645_Data[i] := ord(fname[i + 1]);
 	end;
 
-	P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, @DLT645_Data[0], len);
+	P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, @DL645_Data[0], len);
 
-	DLT645_Len := DLT645.GetFrameLen();
+	DL645_Len := DL645.GetFrameLen();
 
-	CommMakeFrame2(P_DLT645_Frame, DLT645_Len);	
+	CommMakeFrame2(P_DL645_Frame, DL645_Len);	
 
 	if F_Main.SendDataAuto()
 		and CommWaitForResp()
@@ -369,12 +369,12 @@ begin
        		p := GetCommRecvBufAddr();
       		len := GetCommRecvDataLen();   	
       		
-      		if DLT645.CheckFrame(p, len) = True then
+      		if DL645.CheckFrame(p, len) = True then
       		begin
-				ctrl := DLT645.GetCtrl();
-				DI := DLT645.GetDI();
-				pdata := DLT645.GetDataUnit();
-				len := DLT645.GetDataUnitLen();
+				ctrl := DL645.GetCtrl();
+				DI := DL645.GetDI();
+				pdata := DL645.GetDataUnit();
+				len := DL645.GetDataUnitLen();
 
       			case ctrl of
       				$91:
@@ -416,15 +416,15 @@ begin
 
 		      			while ctrl <> $92 do
 		      			begin
-		      				DLT645_Ctrl := $12;
+		      				DL645_Ctrl := $12;
 
 		      				len := length(fname);
 
-							P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, @DLT645_Data[0], len);
+							P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, @DL645_Data[0], len);
 
-							DLT645_Len := DLT645.GetFrameLen();
+							DL645_Len := DL645.GetFrameLen();
 
-							CommMakeFrame2(P_DLT645_Frame, DLT645_Len);	
+							CommMakeFrame2(P_DL645_Frame, DL645_Len);	
 
 							if F_Main.SendDataAuto()
 								and CommWaitForResp()
@@ -437,12 +437,12 @@ begin
 									p := GetCommRecvBufAddr();
 									len := GetCommRecvDataLen();  	
 
-									if DLT645.CheckFrame(p, len) = True then
+									if DL645.CheckFrame(p, len) = True then
 									begin 
-										ctrl := DLT645.GetCtrl();
-										DI := DLT645.GetDI();
-										pdata := DLT645.GetDataUnit();
-										len := DLT645.GetDataUnitLen();
+										ctrl := DL645.GetCtrl();
+										DI := DL645.GetDI();
+										pdata := DL645.GetDataUnit();
+										len := DL645.GetDataUnitLen();
 
 										for i:=0 to (12 - 1) do
 										begin
@@ -515,17 +515,17 @@ var
 begin
 	TButton(Sender).Enabled := False;
 
-	DLT645_Ctrl := $11;
+	DL645_Ctrl := $11;
 
-	DLT645_DI := $F0000000;
+	DL645_DI := $F0000000;
 	
 	len := 0;
 
-	P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
+	P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, nil, len);
 
-	DLT645_Len := DLT645.GetFrameLen();
+	DL645_Len := DL645.GetFrameLen();
 
-	CommMakeFrame2(P_DLT645_Frame, DLT645_Len);
+	CommMakeFrame2(P_DL645_Frame, DL645_Len);
 
 	if F_Main.SendDataAuto()
 		and CommWaitForResp()
@@ -538,10 +538,10 @@ begin
        		p := GetCommRecvBufAddr();
       		len := GetCommRecvDataLen();   	
       		
-      		if DLT645.CheckFrame(p, len) = True then
+      		if DL645.CheckFrame(p, len) = True then
       		begin
-      			ctrl := DLT645.GetCtrl();
-      			DI := DLT645.GetDI();
+      			ctrl := DL645.GetCtrl();
+      			DI := DL645.GetDI();
 
       			if (ctrl = $91) and (DI = $F0000000) then
       			begin
@@ -587,17 +587,17 @@ begin
     begin
     	edt_sys_time.Text := '';
     	
-		DLT645_Ctrl := $11;
+		DL645_Ctrl := $11;
 
-		DLT645_DI := $F0100000;
+		DL645_DI := $F0100000;
 		
 		len := 0;
 
-		P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
+		P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, nil, len);
 
-		DLT645_Len := DLT645.GetFrameLen();
+		DL645_Len := DL645.GetFrameLen();
 
-		CommMakeFrame2(P_DLT645_Frame, DLT645_Len);
+		CommMakeFrame2(P_DL645_Frame, DL645_Len);
 
 		if F_Main.SendDataAuto()
 			and CommWaitForResp()
@@ -610,12 +610,12 @@ begin
 	       		p := GetCommRecvBufAddr();
 	      		len := GetCommRecvDataLen();   	
 	      		
-	      		if DLT645.CheckFrame(p, len) = True then
+	      		if DL645.CheckFrame(p, len) = True then
 	      		begin
-	      			ctrl := DLT645.GetCtrl();
-	      			DI := DLT645.GetDI();
-					pdata := DLT645.GetDataUnit();
-					len := DLT645.GetDataUnitLen();
+	      			ctrl := DL645.GetCtrl();
+	      			DI := DL645.GetDI();
+					pdata := DL645.GetDataUnit();
+					len := DL645.GetDataUnitLen();
 					
 	      			if (ctrl = $91) and (DI = $F0100000) then
 	      			begin
@@ -660,17 +660,17 @@ begin
     	edt_software_version.Text := '';
     	edt_version_date.Text := '';
 
-		DLT645_Ctrl := $11;
+		DL645_Ctrl := $11;
 
-		DLT645_DI := $F0100001;
+		DL645_DI := $F0100001;
 		
 		len := 0;
 
-		P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
+		P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, nil, len);
 
-		DLT645_Len := DLT645.GetFrameLen();
+		DL645_Len := DL645.GetFrameLen();
 
-		CommMakeFrame2(P_DLT645_Frame, DLT645_Len);
+		CommMakeFrame2(P_DL645_Frame, DL645_Len);
 
 		if F_Main.SendDataAuto()
 			and CommWaitForResp()
@@ -683,12 +683,12 @@ begin
 	       		p := GetCommRecvBufAddr();
 	      		len := GetCommRecvDataLen();   	
 	      		
-	      		if DLT645.CheckFrame(p, len) = True then
+	      		if DL645.CheckFrame(p, len) = True then
 	      		begin
-	      			ctrl := DLT645.GetCtrl();
-	      			DI := DLT645.GetDI();
-					pdata := DLT645.GetDataUnit();
-					len := DLT645.GetDataUnitLen();
+	      			ctrl := DL645.GetCtrl();
+	      			DI := DL645.GetDI();
+					pdata := DL645.GetDataUnit();
+					len := DL645.GetDataUnitLen();
 					
 	      			if (ctrl = $91) and (DI = $F0100001) then
 	      			begin
@@ -759,17 +759,17 @@ begin
     	buf[index] := MonthOf(DateTime); Inc(index);
     	buf[index] := YearOf(DateTime) - 2000; Inc(index);
     	
-		DLT645_Ctrl := $14;
+		DL645_Ctrl := $14;
 
-		DLT645_DI := $F0110000;
+		DL645_DI := $F0110000;
 		
 		len := index;
 
-		P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, @buf[0], len);
+		P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, @buf[0], len);
 
-		DLT645_Len := DLT645.GetFrameLen();
+		DL645_Len := DL645.GetFrameLen();
 
-		CommMakeFrame2(P_DLT645_Frame, DLT645_Len);
+		CommMakeFrame2(P_DL645_Frame, DL645_Len);
 
 		if F_Main.SendDataAuto()
 			and CommWaitForResp()
@@ -782,9 +782,9 @@ begin
 	       		p := GetCommRecvBufAddr();
 	      		len := GetCommRecvDataLen();   	
 	      		
-	      		if DLT645.CheckFrame(p, len) = True then
+	      		if DL645.CheckFrame(p, len) = True then
 	      		begin
-	      			ctrl := DLT645.GetCtrl();
+	      			ctrl := DL645.GetCtrl();
 					
 	      			if ctrl = $94 then
 	      			begin
@@ -823,17 +823,17 @@ var
 begin
 	TButton(Sender).Enabled := False;
 
-	DLT645_Ctrl := $14;
+	DL645_Ctrl := $14;
 
-	DLT645_DI := $F0100100;
+	DL645_DI := $F0100100;
 	
 	len := 0;
 
-	P_DLT645_Frame := DLT645.MakeFrame_645(DLT645_Ctrl, DLT645_DI, nil, len);
+	P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, nil, len);
 
-	DLT645_Len := DLT645.GetFrameLen();
+	DL645_Len := DL645.GetFrameLen();
 
-	CommMakeFrame2(P_DLT645_Frame, DLT645_Len);
+	CommMakeFrame2(P_DL645_Frame, DL645_Len);
 
 	if F_Main.SendDataAuto()
 		and CommWaitForResp()
@@ -846,10 +846,10 @@ begin
        		p := GetCommRecvBufAddr();
       		len := GetCommRecvDataLen();   	
       		
-      		if DLT645.CheckFrame(p, len) = True then
+      		if DL645.CheckFrame(p, len) = True then
       		begin
-      			ctrl := DLT645.GetCtrl();
-      			DI := DLT645.GetDI();
+      			ctrl := DL645.GetCtrl();
+      			DI := DL645.GetDI();
 
       			if  ctrl = $94 then
       			begin
