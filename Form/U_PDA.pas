@@ -317,7 +317,7 @@ procedure TF_PDA.btn_uploadClick(Sender: TObject);
 var 
 	fname, content:string;
 	p, pdata:PByte;
-	ctrl:Byte;
+	ctrl, seq:Byte;
 	len, i:Integer;
 	DI:LongWord;
 begin
@@ -414,11 +414,19 @@ begin
 						
 		      			FileCreate(fname, content);
 
+		      			seq := 1;
+
 		      			while ctrl <> $92 do
 		      			begin
 		      				DL645_Ctrl := $12;
 
 		      				len := length(fname);
+
+		      				DL645_Data[len] := seq;
+
+		      				inc(len);
+
+		      				inc(seq);
 
 							P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, @DL645_Data[0], len);
 
@@ -577,7 +585,7 @@ var
 	ctrl:Byte;
 	len:Integer;
 	DI:LongWord;  
-	const weekCaption:array[0..6] of string = ('星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
+	const weekCaption:array[0..6] of string = ('星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
 begin
 	TButton(Sender).Enabled := FALSE;
 	
