@@ -54,7 +54,6 @@ __history/
 *.~*
 
 # 开放模式 @华兄
-Exec/
-Temp/
+Output/
 
 # 保守模式 @华兄

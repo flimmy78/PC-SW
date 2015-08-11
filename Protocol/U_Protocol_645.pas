@@ -16,7 +16,7 @@ const
     INVALID_DI = $ffffffff;
 
     ctrl_read_07   = $11;//读数据
-    ctrl_read_extra_07 = $12;//读后续数据
+    ctrl_read_follow_07 = $12;//读后续数据
     ctrl_write_07  = $14;//写数据
 
     ctrl_read_97   = $01;//读数据
@@ -106,7 +106,7 @@ begin
       end;
       ctrl_read_07,
       ctrl_write_07,
-      ctrl_read_extra_07:
+      ctrl_read_follow_07:
       begin
         MoveMemory(@buf[p], @DI, 4);  Inc(p, 4);
       end;
@@ -180,7 +180,7 @@ begin
     case (m_pFrame.m_ctrl and $1f) of
       ctrl_read_07,
       ctrl_write_07,
-      ctrl_read_extra_07:
+      ctrl_read_follow_07:
       begin
         if m_pFrame.m_dataLen >= 4 then
         begin
@@ -213,7 +213,7 @@ begin
     case (m_pFrame.m_ctrl and $1f) of
       ctrl_read_07,
       ctrl_write_07,
-      ctrl_read_extra_07:
+      ctrl_read_follow_07:
       begin
         if m_pFrame.m_dataLen >= 4 then
         begin
@@ -240,7 +240,7 @@ begin
     case (m_pFrame.m_ctrl and $1f) of
       ctrl_read_07,
       ctrl_write_07,
-      ctrl_read_extra_07:
+      ctrl_read_follow_07:
       begin
           Inc(Result,-4);
       end;

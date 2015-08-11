@@ -139,7 +139,7 @@ type
 var
   F_Main: TF_Main;
 
-const Version = 'v2015.08.10';
+const Version = 'v2015.08.11';
 
 implementation
 
@@ -205,8 +205,6 @@ end;
 
 function  TF_Main.SelProtocol():Boolean;
 var i:Integer;
-    addr:Int64;
-    key:Word;
 begin
     Result := False;
 
@@ -220,9 +218,8 @@ begin
     end;
     FreeAndNil(F_Sel_Protocol);
     }
-    
-    g_func_type := FUNC_RF_TEST;
-    
+
+    {
     if F_Update<>nil then         FreeAndNil(F_Update);
     if F_ParamReadWrite<>nil then FreeAndNil(F_ParamReadWrite);
     if F_Debug<>nil then          FreeAndNil(F_Debug);
@@ -237,26 +234,14 @@ begin
     if O_ProRx_Mod<>nil then  FreeAndNil(O_ProRx_Mod);
     if O_ProTx_645<>nil then  FreeAndNil(O_ProTx_645);
     if O_ProRx_645<>nil then  FreeAndNil(O_ProRx_645);
+    }
 
+    {
     if g_func_type = FUNC_MOD_UPDATE then
     begin
     end
     else if g_func_type = FUNC_CON_UPDATE then
     begin
-        O_ProTx := T_Protocol.Create;
-        O_ProRx := T_Protocol.Create;
-        m_O_ProTmp := T_Protocol.Create;
-
-        Application.CreateForm(TF_Param_Con, F_ParamReadWrite);
-        Application.CreateForm(TF_Update, F_Update);
-        Application.CreateForm(TF_Status, F_Status);
-        Application.CreateForm(TF_SysCtrl, F_SysCtrl);
-        Application.CreateForm(TF_ParamChk, F_ParamChk);
-        Application.CreateForm(TF_Param_ChkMeter, F_Param_ChkMeter);
-        Application.CreateForm(TF_Debug_Con, F_Debug);
-        Application.CreateForm(TF_Operation, F_Operation);
-        Application.CreateForm(TF_Frame, F_Frame);
-        Application.Title := 'Modbus';
     end
     else if g_func_type = FUNC_CON_CHKMETER then
     begin
@@ -264,22 +249,13 @@ begin
     else if g_func_type = FUNC_CON_MOD then
     begin
     end
-    else if g_func_type = FUNC_RF_TEST then //深圳市合尔凯科技有限公司
+    else
     begin
-        O_ProTx := T_Protocol.Create;
-        O_ProRx := T_Protocol.Create;
-        m_O_ProTmp := T_Protocol.Create;
-
-        Application.CreateForm(TF_Rdt, F_Rdt);
-        Application.CreateForm(TF_Operation, F_Operation);
-        Application.CreateForm(TF_DataModule, F_DataModule);
-        Application.CreateForm(TF_Frame, F_Frame);
-        Application.Title := 'PC 软件';
     end;
+    }
 
-    edt_con_addrKeyUp(edt_con_addr, key, []);
-    
-    SetDeviceAddr();
+    O_ProTx := T_Protocol.Create;
+    O_ProRx := T_Protocol.Create;
 
     Caption := Application.Title;
 
@@ -288,6 +264,7 @@ begin
         pgc1.Pages[i].TabVisible := False;
     end;
 
+    {
     if F_Update<>nil then
     begin
         F_Update.Parent := ts_update;           F_Update.Show;
@@ -329,49 +306,48 @@ begin
         F_Param_ChkMeter.Parent := ts_chkmeter;   F_Param_ChkMeter.Show;
         ts_chkmeter.TabVisible := True;
     end;
-    
+    }
 
-    //深圳市合尔凯科技有限公司
     if F_Rdt<>nil then
     begin
-        F_Rdt.Parent := ts_rdt;   F_Rdt.Show;
-        ts_rdt.TabVisible := True;
+        F_Rdt.Parent            := ts_rdt;            F_Rdt.Show;
+        ts_rdt.TabVisible       := True;
     end;
 
     if F_Key<>nil then
     begin
-        F_Key.Parent := ts_key;   F_Key.Show;
-        ts_key.TabVisible := True;
+        F_Key.Parent            := ts_key;            F_Key.Show;
+        ts_key.TabVisible       := True;
     end;
 
     if F_Temp<>nil then
     begin
-        F_Temp.Parent := ts_temp;   F_Temp.Show;
-        ts_temp.TabVisible := True;
+        F_Temp.Parent           := ts_temp;           F_Temp.Show;
+        ts_temp.TabVisible      := True;
     end;
 
     if F_Noise<>nil then
     begin
-        F_Noise.Parent := ts_noise;   F_Noise.Show;
-        ts_noise.TabVisible := True;
+        F_Noise.Parent          := ts_noise;          F_Noise.Show;
+        ts_noise.TabVisible     := True;
     end;
 
     if F_Operation<>nil then
     begin
-        F_Operation.Parent      := ts_operation;        F_Operation.Show;
+        F_Operation.Parent      := ts_operation;      F_Operation.Show;
         ts_operation.TabVisible := True;
     end;
 
     if F_Frame<>nil then
     begin
-        F_Frame.Parent          := ts_frame;            F_Frame.Show;
-        ts_frame.TabVisible := True;
+        F_Frame.Parent          := ts_frame;          F_Frame.Show;
+        ts_frame.TabVisible     := True;
     end;
 
     if F_PDA<>nil then
     begin
-        F_PDA.Parent            := ts_pda;              F_PDA.Show;
-        ts_pda.TabVisible := True;
+        F_PDA.Parent            := ts_pda;            F_PDA.Show;
+        ts_pda.TabVisible       := True;
     end;
 
     for i:=pgc1.PageCount-1 downto 0 do

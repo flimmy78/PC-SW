@@ -3,7 +3,7 @@ object F_Key: TF_Key
   Top = 181
   Align = alClient
   BorderStyle = bsNone
-  Caption = #38053#21273
+  Caption = #26080#32447#38053#21273
   ClientHeight = 431
   ClientWidth = 994
   Color = clBtnFace

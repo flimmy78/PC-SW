@@ -52,11 +52,11 @@ const
     clSucced = clBlue;
     clFailed = clRed;
 const
+    FUNC_DEFAULT      = 0; //默认
     FUNC_MOD_UPDATE   = 1; //路由板升级
     FUNC_CON_UPDATE   = 2; //集中器升级
     FUNC_CON_CHKMETER = 3; //通过集中器校表
     FUNC_CON_MOD      = 4; //通过集中器升级路由板
-    FUNC_RF_TEST      = 5; //无线测试
 const
     INVALID_DEVADDR = $ffffffffffff;
 

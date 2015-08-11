@@ -45,8 +45,11 @@ uses
 
 begin
   Application.Initialize;
-  Application.Title := 'Delphi';
+  Application.Title := 'PC-SW';
   Application.CreateForm(TF_Main, F_Main);
+  Application.CreateForm(TF_Frame, F_Frame);
+  Application.CreateForm(TF_Operation, F_Operation);
+  Application.CreateForm(TF_Rdt, F_Rdt);
   Application.CreateForm(TF_Key, F_Key);
   Application.CreateForm(TF_Temp, F_Temp);
   Application.CreateForm(TF_Noise, F_Noise);

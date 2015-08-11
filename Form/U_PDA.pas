@@ -414,7 +414,7 @@ begin
 						
 		      			FileCreate(fname, content);
 
-		      			seq := 1;
+		      			seq := $01;
 
 		      			while ctrl <> $92 do
 		      			begin
@@ -427,6 +427,11 @@ begin
 		      				inc(len);
 
 		      				inc(seq);
+
+		      				if (seq = $00) or (seq > $FF) then
+		      				begin
+		      					seq := $01;
+		      				end;
 
 							P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, @DL645_Data[0], len);
 
