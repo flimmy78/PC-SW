@@ -8,8 +8,7 @@ uses
   IdTCPServer, U_Protocol, U_ComComm, Grids, ComCtrls, U_MyFunction, U_ParamReadWrite,
   U_Protocol_mod, U_Protocol_con, U_Protocol_645, Math, U_Disp, U_Process, DateUtils,
   U_TcpClient, U_TcpServer, Menus, StrUtils, DB, ADODB, U_DataModule,
-  U_Status, U_SysCtrl, U_ParamChk,
-  U_Rdt, U_Multi;
+  U_Status, U_SysCtrl, U_ParamChk;
 
 const WM_DISPLAY_TCP_ACTION = WM_USER + 1;
       WM_UPDATE_START       = WM_USER + 2;
@@ -141,9 +140,9 @@ const Version = 'v2015.08.12';
 
 implementation
 
-uses U_Update,U_ParseFrame, U_Debug, U_Debug_Con, U_Operation,U_Frame, U_Sel_Protocol,
+uses U_Update, U_Debug, U_Debug_Con, U_Operation,U_Frame, U_Sel_Protocol,
      U_Param_Mod, U_Param_Con, U_Param_ChkMeter,U_Update_Con_Mod,U_Param_Con_Mod,
-  U_Debug_Con_Mod, U_Container, U_Key, U_Temp, U_Noise, U_PDA;
+  U_Debug_Con_Mod, U_Container, U_Multi, U_Rdt, U_Key, U_Temp, U_Noise, U_PDA;
 
 {$R *.dfm}
 
