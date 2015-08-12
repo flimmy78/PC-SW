@@ -302,7 +302,7 @@ object F_Main: TF_Main
         Top = 0
         Width = 1071
         Height = 255
-        ActivePage = ts_key
+        ActivePage = ts_rdt
         Align = alClient
         TabOrder = 0
         object ts_update: TTabSheet

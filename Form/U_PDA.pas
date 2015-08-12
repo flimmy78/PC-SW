@@ -58,20 +58,23 @@ type
 
 var
   F_PDA: TF_PDA;
-  DL645:T_Protocol_645;
-  P_DL645_Frame:PByte;
-  DL645_Ctrl:Byte;
-  DL645_Len:Integer;
-  DL645_DI:LongWord;
-  DL645_Data:Array[0..255] of Byte;
 
 implementation
 
 {$R *.dfm}
 
-const file_manage_null = 0;
-      file_manage_name = 1;
-      file_manage_size = 2;
+const
+  file_manage_null = 0;
+  file_manage_name = 1;
+  file_manage_size = 2;
+
+var
+  DL645: T_Protocol_645;
+  P_DL645_Frame: PByte;
+  DL645_Len: Integer;
+  DL645_Ctrl: Byte;
+  DL645_DI: LongWord;
+  DL645_Data: Array[0..255] of Byte;        
 
 procedure TF_PDA.FormCreate(Sender: TObject);
 begin

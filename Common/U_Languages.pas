@@ -1,4 +1,4 @@
-unit U_Multilanguages;
+unit U_Languages;
 {$I MySet.inc}
 interface
 uses

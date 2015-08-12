@@ -9,8 +9,6 @@ uses
   U_Protocol_mod, U_Protocol_con, U_Protocol_645, Math, U_Disp, U_Process, DateUtils,
   U_TcpClient, U_TcpServer, Menus, StrUtils, DB, ADODB, U_DataModule,
   U_Status, U_SysCtrl, U_ParamChk,
-
-  //深圳市合尔凯科技有限公司
   U_Rdt, U_Multi;
 
 const WM_DISPLAY_TCP_ACTION = WM_USER + 1;
@@ -139,7 +137,7 @@ type
 var
   F_Main: TF_Main;
 
-const Version = 'v2015.08.11';
+const Version = 'v2015.08.12';
 
 implementation
 
