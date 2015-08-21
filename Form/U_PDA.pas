@@ -238,6 +238,7 @@ procedure TF_PDA.btn_syncClick(Sender: TObject);
 var
 	fname, fsize:string;
 	p, pdata:PByte;
+	ctrl:Byte;
 	len, i, size:Integer;
 	DI:LongWord;
 begin
@@ -270,40 +271,48 @@ begin
       		
       		if DL645.CheckFrame(p, len) = True then
       		begin
+      			ctrl := DL645.GetCtrl();
       			DI := DL645.GetDI();
       			pdata := DL645.GetDataUnit();
       			len := DL645.GetDataUnitLen(); 
 
-      			inc(pdata);
-      			inc(pdata);
-      			inc(pdata);
-      			inc(pdata);
-      			len := len - 4;
+      			if (ctrl = $91) and (DI = SCAN_FILE_CMD) then
+      			begin
+	      			inc(pdata);
+	      			inc(pdata);
+	      			inc(pdata);
+	      			inc(pdata);
+	      			len := len - 4;
 
-				while len > 0 do
-				begin
-					fname := '';
-					for i:=0 to 11 do
+					while len > 0 do
 					begin
-						fname := fname + chr(pdata^);
-						inc(pdata);
-					end;
+						fname := '';
+						for i:=0 to 11 do
+						begin
+							fname := fname + chr(pdata^);
+							inc(pdata);
+						end;
 
-					size := 0;
-					fsize := '';
-					for i:=0 to 3 do
-					begin
-						size := size + (pdata^ shl (i * 8));
-						inc(pdata);
-					end;
-					fsize := IntToStr(size) + '  Bytes';
+						size := 0;
+						fsize := '';
+						for i:=0 to 3 do
+						begin
+							size := size + (pdata^ shl (i * 8));
+							inc(pdata);
+						end;
+						fsize := IntToStr(size) + '  Bytes';
 
-					len := len - 16;
-					
-	      			strngrd_file_manage_Display(fname, fsize);
-				end;
-      			
-      			g_disp.DispLog('同步成功');
+						len := len - 16;
+						
+		      			strngrd_file_manage_Display(fname, fsize);
+					end;
+	      			
+	      			g_disp.DispLog('同步成功');     			
+      			end
+      			else
+      			begin
+      				g_disp.DispLog('同步失败');
+      			end;
       		end
       		else
       		begin
@@ -566,7 +575,7 @@ begin
       			ctrl := DL645.GetCtrl();
       			DI := DL645.GetDI();
 
-      			if (ctrl = $91) and (DI = $F0000000) then
+      			if (ctrl = $91) and (DI = SHAKE_HANDS_CMD) then
       			begin
       				g_disp.DispLog('握手成功');
       			end
@@ -640,7 +649,7 @@ begin
 					pdata := DL645.GetDataUnit();
 					len := DL645.GetDataUnitLen();
 					
-	      			if (ctrl = $91) and (DI = $F0100000) then
+	      			if (ctrl = $91) and (DI = READ_TIME_CMD) then
 	      			begin
 						edt_sys_time.Text := Format('20%.2x-%.2x-%.2x  %.2x:%.2x:%.2x  %s', [
 											   		PByte(Integer(pdata) + 6)^,
@@ -713,7 +722,7 @@ begin
 					pdata := DL645.GetDataUnit();
 					len := DL645.GetDataUnitLen();
 					
-	      			if (ctrl = $91) and (DI = $F0100001) then
+	      			if (ctrl = $91) and (DI = READ_VERSION_CMD) then
 	      			begin
 						edt_hardware_version.Text := Format('v%.d.%.d', [
 															PByte(Integer(pdata) + 0)^ div 10,
@@ -842,7 +851,6 @@ var
 	p:PByte;
 	ctrl:Byte;
 	len:Integer;
-	DI:LongWord;
 begin
 	TButton(Sender).Enabled := False;
 
@@ -872,9 +880,8 @@ begin
       		if DL645.CheckFrame(p, len) = True then
       		begin
       			ctrl := DL645.GetCtrl();
-      			DI := DL645.GetDI();
 
-      			if  ctrl = $94 then
+      			if ctrl = $94 then
       			begin
       				g_disp.DispLog('恢复出厂成功');
       			end
