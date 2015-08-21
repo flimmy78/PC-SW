@@ -67,13 +67,13 @@ const
   file_manage_null = 0;
   file_manage_name = 1;
   file_manage_size = 2;
-  SHAKE_HANDS_CMD  = $F0000000;
-  SCAN_FILE_CMD    = $F0000100;
-  READ_FILE_CMD    = $F0010100;
-  READ_TIME_CMD    = $F0100000;
-  WRITE_TIME_CMD   = $F0110000;
-  READ_VERSION_CMD = $F0100001;
-  RESTORE_CMD      = $F0100100;
+  SHAKE_HANDS_CMD  = $FF000001;
+  SCAN_FILE_CMD    = $FF000010;
+  READ_FILE_CMD    = $FF000011;
+  READ_TIME_CMD    = $FF000100;
+  WRITE_TIME_CMD   = $FF000101;
+  READ_VERSION_CMD = $FF000110;
+  RESTORE_CMD      = $FF000111;
 
 var
   DL645: T_Protocol_645;
