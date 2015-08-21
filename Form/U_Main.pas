@@ -136,12 +136,13 @@ type
 var
   F_Main: TF_Main;
 
-const Version = 'v2015.08.12';
+const Version = 'v2015.08.21';
 
 implementation
 
-uses U_Update, U_Debug, U_Debug_Con, U_Operation,U_Frame, U_Sel_Protocol,
-     U_Param_Mod, U_Param_Con, U_Param_ChkMeter,U_Update_Con_Mod,U_Param_Con_Mod,
+uses
+  U_Update, U_Debug, U_Debug_Con, U_Operation,U_Frame, U_Sel_Protocol,
+  U_Param_Mod, U_Param_Con, U_Param_ChkMeter,U_Update_Con_Mod,U_Param_Con_Mod,
   U_Debug_Con_Mod, U_Container, U_Multi, U_Rdt, U_Key, U_Temp, U_Noise, U_PDA;
 
 {$R *.dfm}

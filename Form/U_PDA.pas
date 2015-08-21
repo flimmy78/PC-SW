@@ -67,6 +67,13 @@ const
   file_manage_null = 0;
   file_manage_name = 1;
   file_manage_size = 2;
+  SHAKE_HANDS_CMD  = $F0000000;
+  SCAN_FILE_CMD    = $F0000100;
+  READ_FILE_CMD    = $F0010100;
+  READ_TIME_CMD    = $F0100000;
+  WRITE_TIME_CMD   = $F0110000;
+  READ_VERSION_CMD = $F0100001;
+  RESTORE_CMD      = $F0100100;
 
 var
   DL645: T_Protocol_645;
@@ -240,7 +247,7 @@ begin
 
 	DL645_Ctrl := $11;
 
-	DL645_DI := $F0000100;
+	DL645_DI := SCAN_FILE_CMD;
 	
 	len := 0;
 
@@ -338,7 +345,7 @@ begin
 
 	DL645_Ctrl := $11;
 
-	DL645_DI := $F0010100;
+	DL645_DI := READ_FILE_CMD;
 
 	len := length(fname);
 
@@ -533,7 +540,7 @@ begin
 
 	DL645_Ctrl := $11;
 
-	DL645_DI := $F0000000;
+	DL645_DI := SHAKE_HANDS_CMD;
 	
 	len := 0;
 
@@ -605,7 +612,7 @@ begin
     	
 		DL645_Ctrl := $11;
 
-		DL645_DI := $F0100000;
+		DL645_DI := READ_TIME_CMD;
 		
 		len := 0;
 
@@ -678,7 +685,7 @@ begin
 
 		DL645_Ctrl := $11;
 
-		DL645_DI := $F0100001;
+		DL645_DI := READ_VERSION_CMD;
 		
 		len := 0;
 
@@ -777,7 +784,7 @@ begin
     	
 		DL645_Ctrl := $14;
 
-		DL645_DI := $F0110000;
+		DL645_DI := WRITE_TIME_CMD;
 		
 		len := index;
 
@@ -841,7 +848,7 @@ begin
 
 	DL645_Ctrl := $14;
 
-	DL645_DI := $F0100100;
+	DL645_DI := RESTORE_CMD;
 	
 	len := 0;
 
