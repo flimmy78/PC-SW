@@ -261,7 +261,8 @@ object F_Main: TF_Main
           '5'
           '6'
           '7'
-          '8')
+          '8'
+          '9')
       end
       object cbb_StopBits: TComboBox
         Left = 399
@@ -302,7 +303,7 @@ object F_Main: TF_Main
         Top = 0
         Width = 1071
         Height = 255
-        ActivePage = ts_rdt
+        ActivePage = ts_mems
         Align = alClient
         TabOrder = 0
         object ts_update: TTabSheet
@@ -352,6 +353,10 @@ object F_Main: TF_Main
         object ts_pda: TTabSheet
           Caption = #25484#26426
           ImageIndex = 11
+        end
+        object ts_mems: TTabSheet
+          Caption = #27668#20307#27969#37327#35745
+          ImageIndex = 12
         end
       end
       object pgc2: TPageControl

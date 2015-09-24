@@ -14,7 +14,7 @@ uses
   U_Protocol_mod in '..\Protocol\U_Protocol_mod.pas',
   U_Protocol_con in '..\Protocol\U_Protocol_con.pas',
   U_Protocol_645 in '..\Protocol\U_Protocol_645.pas',
-  U_UpdateDev in '..\Protocol\U_UpdateDev.pas',    
+  U_UpdateDev in '..\Protocol\U_UpdateDev.pas',
   U_Main in '..\Form\U_Main.pas' {F_Main},
   U_Update in '..\Form\U_Update.pas' {F_Update},
   U_ParamReadWrite in '..\Form\U_ParamReadWrite.pas' {F_ParamReadWrite},
@@ -38,7 +38,8 @@ uses
   U_Key in '..\Form\U_Key.pas' {F_Key},
   U_Temp in '..\Form\U_Temp.pas' {F_Temp},
   U_Noise in '..\Form\U_Noise.pas' {F_Noise},
-  U_PDA in '..\Form\U_PDA.pas' {F_PDA};
+  U_PDA in '..\Form\U_PDA.pas' {F_PDA},
+  U_MEMS in '..\Form\U_MEMS.pas' {F_MEMS};
 
 {$R *.res}
 
@@ -54,5 +55,6 @@ begin
   Application.CreateForm(TF_Temp, F_Temp);
   Application.CreateForm(TF_Noise, F_Noise);
   Application.CreateForm(TF_PDA, F_PDA);
+  Application.CreateForm(TF_MEMS, F_MEMS);
   Application.Run;
 end.
