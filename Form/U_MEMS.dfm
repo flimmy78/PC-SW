@@ -1,11 +1,11 @@
 object F_MEMS: TF_MEMS
-  Left = 307
-  Top = 225
+  Left = 477
+  Top = 272
   Align = alClient
   BorderStyle = bsNone
   Caption = #27668#20307#27969#37327#35745
-  ClientHeight = 442
-  ClientWidth = 912
+  ClientHeight = 408
+  ClientWidth = 843
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,13 +13,14 @@ object F_MEMS: TF_MEMS
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object scrlbx1: TScrollBox
     Left = 0
     Top = 0
-    Width = 912
-    Height = 442
+    Width = 843
+    Height = 408
     Align = alClient
     Color = clBtnFace
     ParentColor = False
@@ -29,7 +30,7 @@ object F_MEMS: TF_MEMS
       Top = 14
       Width = 397
       Height = 392
-      Caption = #31995#32479#37197#32622
+      Caption = #31995#32479#20449#24687
       TabOrder = 0
       object lbl_hard: TLabel
         Left = 94
@@ -52,6 +53,7 @@ object F_MEMS: TF_MEMS
         Height = 25
         Caption = #24674#22797#20986#21378
         TabOrder = 0
+        OnClick = btn_restore_defaultsClick
       end
       object edt_sys_time: TEdit
         Left = 96
@@ -69,13 +71,14 @@ object F_MEMS: TF_MEMS
         ReadOnly = True
         TabOrder = 1
       end
-      object btn_write_para: TButton
+      object btn_sysinfo_write_para: TButton
         Left = 158
         Top = 352
         Width = 75
         Height = 25
         Caption = #20889#21442#25968
         TabOrder = 2
+        OnClick = btn_sysinfo_write_paraClick
       end
       object chk_sys_time: TCheckBox
         Left = 9
@@ -96,7 +99,7 @@ object F_MEMS: TF_MEMS
       object edt_hardware_version: TEdit
         Left = 157
         Top = 69
-        Width = 84
+        Width = 108
         Height = 22
         BevelInner = bvNone
         BevelKind = bkFlat
@@ -115,7 +118,7 @@ object F_MEMS: TF_MEMS
       object edt_software_version: TEdit
         Left = 157
         Top = 109
-        Width = 84
+        Width = 108
         Height = 22
         BevelInner = bvNone
         BevelKind = bkFlat
@@ -138,14 +141,16 @@ object F_MEMS: TF_MEMS
         Height = 17
         Caption = #20840#36873
         TabOrder = 7
+        OnClick = chk_allClick
       end
-      object btn_read_para: TBitBtn
+      object btn_sysinfo_read_para: TBitBtn
         Left = 29
         Top = 352
         Width = 75
         Height = 25
         Caption = #35835#21442#25968
         TabOrder = 8
+        OnClick = btn_sysinfo_read_paraClick
       end
     end
     object scrlbx2: TGroupBox
@@ -193,11 +198,11 @@ object F_MEMS: TF_MEMS
       object edt_cal_read_grp2: TEdit
         Left = 128
         Top = 88
-        Width = 113
+        Width = 121
         Height = 23
         Color = 15199215
         Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clNavy
         Font.Height = -12
         Font.Name = 'Times New Roman'
         Font.Style = []
@@ -208,24 +213,25 @@ object F_MEMS: TF_MEMS
       object edt_cal_write_grp1: TEdit
         Left = 264
         Top = 32
-        Width = 81
+        Width = 121
         Height = 23
         Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clNavy
         Font.Height = -12
         Font.Name = 'Times New Roman'
         Font.Style = []
         ParentFont = False
         TabOrder = 1
+        OnKeyPress = edt_memsInput
       end
       object edt_cal_read_grp4: TEdit
         Left = 128
         Top = 200
-        Width = 113
+        Width = 121
         Height = 23
         Color = 15199215
         Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clNavy
         Font.Height = -12
         Font.Name = 'Times New Roman'
         Font.Style = []
@@ -236,11 +242,11 @@ object F_MEMS: TF_MEMS
       object edt_cal_read_grp3: TEdit
         Left = 128
         Top = 144
-        Width = 113
+        Width = 121
         Height = 23
         Color = 15199215
         Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clNavy
         Font.Height = -12
         Font.Name = 'Times New Roman'
         Font.Style = []
@@ -251,11 +257,11 @@ object F_MEMS: TF_MEMS
       object edt_cal_read_grp1: TEdit
         Left = 128
         Top = 32
-        Width = 113
+        Width = 121
         Height = 23
         Color = 15199215
         Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clNavy
         Font.Height = -12
         Font.Name = 'Times New Roman'
         Font.Style = []
@@ -266,82 +272,89 @@ object F_MEMS: TF_MEMS
       object edt_cal_write_grp2: TEdit
         Left = 264
         Top = 88
-        Width = 81
+        Width = 121
         Height = 23
         Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clNavy
         Font.Height = -12
         Font.Name = 'Times New Roman'
         Font.Style = []
         ParentFont = False
         TabOrder = 5
+        OnKeyPress = edt_memsInput
       end
       object edt_cal_write_grp3: TEdit
         Left = 264
         Top = 144
-        Width = 81
+        Width = 121
         Height = 23
         Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clNavy
         Font.Height = -12
         Font.Name = 'Times New Roman'
         Font.Style = []
         ParentFont = False
         TabOrder = 6
+        OnKeyPress = edt_memsInput
       end
       object edt_cal_write_grp4: TEdit
         Left = 264
         Top = 200
-        Width = 81
+        Width = 121
         Height = 23
         Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clNavy
         Font.Height = -12
         Font.Name = 'Times New Roman'
         Font.Style = []
         ParentFont = False
         TabOrder = 7
+        OnKeyPress = edt_memsInput
       end
       object btn_cal_save_grp1: TButton
-        Left = 374
+        Left = 406
         Top = 30
         Width = 75
         Height = 25
         Caption = #20445#23384
         TabOrder = 8
+        OnClick = btn_cal_save_grp1Click
       end
       object btn_cal_save_grp2: TButton
-        Left = 374
+        Left = 406
         Top = 86
         Width = 75
         Height = 25
         Caption = #20445#23384
         TabOrder = 9
+        OnClick = btn_cal_save_grp2Click
       end
       object btn_cal_save_grp3: TButton
-        Left = 374
+        Left = 406
         Top = 142
         Width = 75
         Height = 25
         Caption = #20445#23384
         TabOrder = 10
+        OnClick = btn_cal_save_grp3Click
       end
       object btn_cal_save_grp4: TButton
-        Left = 374
+        Left = 406
         Top = 198
         Width = 75
         Height = 25
         Caption = #20445#23384
         TabOrder = 11
+        OnClick = btn_cal_save_grp4Click
       end
       object edt_cal_read_grp5: TEdit
         Left = 128
         Top = 256
-        Width = 113
+        Width = 121
         Height = 23
         Color = 15199215
         Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clNavy
         Font.Height = -12
         Font.Name = 'Times New Roman'
         Font.Style = []
@@ -352,23 +365,25 @@ object F_MEMS: TF_MEMS
       object edt_cal_write_grp5: TEdit
         Left = 264
         Top = 256
-        Width = 81
+        Width = 121
         Height = 23
         Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clNavy
         Font.Height = -12
         Font.Name = 'Times New Roman'
         Font.Style = []
         ParentFont = False
         TabOrder = 13
+        OnKeyPress = edt_memsInput
       end
       object btn_cal_save_grp5: TButton
-        Left = 374
+        Left = 406
         Top = 254
         Width = 75
         Height = 25
         Caption = #20445#23384
         TabOrder = 14
+        OnClick = btn_cal_save_grp5Click
       end
       object btn_cal_read_para: TBitBtn
         Left = 29
@@ -377,6 +392,16 @@ object F_MEMS: TF_MEMS
         Height = 25
         Caption = #35835#21442#25968
         TabOrder = 15
+        OnClick = btn_cal_read_paraClick
+      end
+      object btn_cal_confirm: TButton
+        Left = 158
+        Top = 352
+        Width = 75
+        Height = 25
+        Caption = #30830#35748
+        TabOrder = 16
+        OnClick = btn_cal_confirmClick
       end
     end
     object GroupBox1: TGroupBox
@@ -384,23 +409,106 @@ object F_MEMS: TF_MEMS
       Top = 14
       Width = 373
       Height = 392
-      Caption = #20445#30041
+      Caption = #27969#37327#28040#25238
       TabOrder = 2
-      object btn_load: TButton
+      object Label6: TLabel
+        Left = 24
+        Top = 38
+        Width = 30
+        Height = 13
+        Caption = #38408#20540'  '
+      end
+      object Label7: TLabel
+        Left = 24
+        Top = 94
+        Width = 30
+        Height = 13
+        Caption = #27425#25968'  '
+      end
+      object btn_debounce_read_para: TButton
         Left = 29
         Top = 352
         Width = 75
         Height = 25
         Caption = #35835#21442#25968
         TabOrder = 0
+        OnClick = btn_debounce_read_paraClick
       end
-      object btn_cancel: TButton
-        Left = 158
-        Top = 352
+      object edt_debounce_threshold_read: TEdit
+        Left = 56
+        Top = 32
+        Width = 97
+        Height = 23
+        Color = 15199215
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 1
+      end
+      object edt_debounce_times_read: TEdit
+        Left = 56
+        Top = 88
+        Width = 97
+        Height = 23
+        Color = 15199215
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 2
+      end
+      object edt_debounce_threshold_write: TEdit
+        Left = 168
+        Top = 32
+        Width = 94
+        Height = 23
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+        OnKeyPress = edt_memsInput
+      end
+      object edt_debounce_times_write: TEdit
+        Left = 168
+        Top = 88
+        Width = 94
+        Height = 23
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+        OnKeyPress = edt_memsInput
+      end
+      object btn_debounce_save_threshold: TButton
+        Left = 282
+        Top = 30
         Width = 75
         Height = 25
-        Caption = #20889#21442#25968
-        TabOrder = 1
+        Caption = #20445#23384
+        TabOrder = 5
+        OnClick = btn_debounce_save_thresholdClick
+      end
+      object btn_debounce_save_times: TButton
+        Left = 282
+        Top = 86
+        Width = 75
+        Height = 25
+        Caption = #20445#23384
+        TabOrder = 6
+        OnClick = btn_debounce_save_timesClick
       end
     end
   end

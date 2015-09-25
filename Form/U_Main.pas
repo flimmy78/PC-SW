@@ -137,7 +137,7 @@ type
 var
   F_Main: TF_Main;
 
-const Version = 'v2015.09.24';
+const Version = 'v2015.09.25';
 
 implementation
 

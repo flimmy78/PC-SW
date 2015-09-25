@@ -1,11 +1,11 @@
 object F_PDA: TF_PDA
-  Left = 115
-  Top = 112
+  Left = -8
+  Top = -8
   Align = alClient
   BorderStyle = bsNone
   Caption = #25484#26426
-  ClientHeight = 464
-  ClientWidth = 895
+  ClientHeight = 706
+  ClientWidth = 1366
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -30,8 +30,8 @@ object F_PDA: TF_PDA
   object scrlbx1: TScrollBox
     Left = 0
     Top = 0
-    Width = 895
-    Height = 464
+    Width = 1366
+    Height = 706
     Align = alClient
     Color = clBtnFace
     ParentColor = False
@@ -109,7 +109,7 @@ object F_PDA: TF_PDA
         Caption = #30828#20214#29256#26412'    '
       end
       object Label1: TLabel
-        Left = 93
+        Left = 94
         Top = 114
         Width = 60
         Height = 13
