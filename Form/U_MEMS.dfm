@@ -1,11 +1,11 @@
 object F_MEMS: TF_MEMS
-  Left = 477
-  Top = 272
+  Left = -8
+  Top = -8
   Align = alClient
   BorderStyle = bsNone
   Caption = #27668#20307#27969#37327#35745
-  ClientHeight = 408
-  ClientWidth = 843
+  ClientHeight = 706
+  ClientWidth = 1366
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,8 +19,8 @@ object F_MEMS: TF_MEMS
   object scrlbx1: TScrollBox
     Left = 0
     Top = 0
-    Width = 843
-    Height = 408
+    Width = 1366
+    Height = 706
     Align = alClient
     Color = clBtnFace
     ParentColor = False
@@ -418,13 +418,6 @@ object F_MEMS: TF_MEMS
         Height = 13
         Caption = #38408#20540'  '
       end
-      object Label7: TLabel
-        Left = 24
-        Top = 94
-        Width = 30
-        Height = 13
-        Caption = #27425#25968'  '
-      end
       object btn_debounce_read_para: TButton
         Left = 29
         Top = 352
@@ -449,21 +442,6 @@ object F_MEMS: TF_MEMS
         ReadOnly = True
         TabOrder = 1
       end
-      object edt_debounce_times_read: TEdit
-        Left = 56
-        Top = 88
-        Width = 97
-        Height = 23
-        Color = 15199215
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clNavy
-        Font.Height = -12
-        Font.Name = 'Times New Roman'
-        Font.Style = []
-        ParentFont = False
-        ReadOnly = True
-        TabOrder = 2
-      end
       object edt_debounce_threshold_write: TEdit
         Left = 168
         Top = 32
@@ -475,21 +453,7 @@ object F_MEMS: TF_MEMS
         Font.Name = 'Times New Roman'
         Font.Style = []
         ParentFont = False
-        TabOrder = 3
-        OnKeyPress = edt_memsInput
-      end
-      object edt_debounce_times_write: TEdit
-        Left = 168
-        Top = 88
-        Width = 94
-        Height = 23
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clNavy
-        Font.Height = -12
-        Font.Name = 'Times New Roman'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 4
+        TabOrder = 2
         OnKeyPress = edt_memsInput
       end
       object btn_debounce_save_threshold: TButton
@@ -498,17 +462,8 @@ object F_MEMS: TF_MEMS
         Width = 75
         Height = 25
         Caption = #20445#23384
-        TabOrder = 5
+        TabOrder = 3
         OnClick = btn_debounce_save_thresholdClick
-      end
-      object btn_debounce_save_times: TButton
-        Left = 282
-        Top = 86
-        Width = 75
-        Height = 25
-        Caption = #20445#23384
-        TabOrder = 6
-        OnClick = btn_debounce_save_timesClick
       end
     end
   end

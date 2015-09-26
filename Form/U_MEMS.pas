@@ -48,13 +48,9 @@ type
     btn_debounce_read_para: TButton;
     btn_cal_confirm: TButton;
     Label6: TLabel;
-    Label7: TLabel;
     edt_debounce_threshold_read: TEdit;
-    edt_debounce_times_read: TEdit;
     edt_debounce_threshold_write: TEdit;
-    edt_debounce_times_write: TEdit;
     btn_debounce_save_threshold: TButton;
-    btn_debounce_save_times: TButton;
     procedure FormCreate(Sender: TObject);
     procedure chk_allClick(Sender: TObject);
     procedure edt_memsInput(Sender: TObject; var Key: Char);
@@ -70,7 +66,6 @@ type
     procedure btn_cal_confirmClick(Sender: TObject);
     procedure btn_debounce_read_paraClick(Sender: TObject);
     procedure btn_debounce_save_thresholdClick(Sender: TObject);
-    procedure btn_debounce_save_timesClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -99,7 +94,6 @@ const
 	CAL_CONFIRM_CMD = $FF00000C;
 	READ_DEBOUNCE_CMD = $FF00000D;
 	WRITE_DEBOUNCE_THRESHOLD_CMD = $FF00000E;
-	WRITE_DEBOUNCE_TIMES_CMD = $FF00000F;
 
 var
 	DL645: T_Protocol_645;
@@ -947,7 +941,7 @@ procedure TF_MEMS.btn_debounce_read_paraClick(Sender: TObject);
 var
 	p:PByte;
 	ctrl:Byte;
-	len, debounce_threshold, debounce_times:Integer;
+	len, debounce_threshold:Integer;
 	DI:LongWord;
 	pdata:PInteger;
 begin
@@ -988,10 +982,8 @@ begin
 					pdata := PInteger(p);
       			
 					debounce_threshold := PInteger(Integer(pdata) + 0 * 4)^;
-					debounce_times := PInteger(Integer(pdata) + 1 * 4)^;
 
 					edt_debounce_threshold_read.text := IntToStr(debounce_threshold);
-					edt_debounce_times_read.text := IntToStr(debounce_times);
       			
       				g_disp.DispLog('读流量消抖成功');
       			end
@@ -1070,73 +1062,6 @@ begin
 	    	else
 	    	begin
 	    		g_disp.DispLog('写流量消抖阈值失败');
-	    	end;
-	    end
-	    else
-	    begin
-	    	g_disp.DispLog('串口接收无数据');
-	    end;
-	end  
-	else
-	begin
-	
-	end;  
-
-    TButton(Sender).Enabled := TRUE;
-end;
-
-procedure TF_MEMS.btn_debounce_save_timesClick(Sender: TObject);
-var
-	p:PByte;
-	ctrl:Byte;
-	len, data:Integer;
-	buf:array[0..63] of Byte;
-begin
-	TButton(Sender).Enabled := FALSE;
-
-	data := StrToInt(edt_debounce_times_write.text);
-
-	CopyMemory(@buf[0], @data, 4);
-	
-	DL645_Ctrl := $14;
-
-	DL645_DI := WRITE_DEBOUNCE_TIMES_CMD;
-	
-	len := 4;
-
-	P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, @buf[0], len);
-
-	DL645_Len := DL645.GetFrameLen();
-
-	CommMakeFrame2(P_DL645_Frame, DL645_Len);
-
-	if F_Main.SendDataAuto()
-		and CommWaitForResp()
-	then
-	begin	
-		if CommRecved = True then
-	    begin
-	    	CommRecved := False;
-	    	
-       		p := GetCommRecvBufAddr();
-      		len := GetCommRecvDataLen();   	
-      		
-      		if DL645.CheckFrame(p, len) = True then
-      		begin
-      			ctrl := DL645.GetCtrl();
-				
-      			if ctrl = $94 then
-      			begin
-      				g_disp.DispLog('写流量消抖次数成功');
-      			end
-      			else
-      			begin
-      				g_disp.DispLog('写流量消抖次数失败');
-      			end;
-      		end	
-	    	else
-	    	begin
-	    		g_disp.DispLog('写流量消抖次数失败');
 	    	end;
 	    end
 	    else
