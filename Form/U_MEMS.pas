@@ -947,6 +947,8 @@ var
 begin
 	TButton(Sender).Enabled := False;
 
+	edt_debounce_threshold_read.text := '';
+
 	DL645_Ctrl := $11;
 
 	DL645_DI := READ_DEBOUNCE_CMD;
