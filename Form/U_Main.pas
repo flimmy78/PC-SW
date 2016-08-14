@@ -137,7 +137,7 @@ type
 var
   F_Main: TF_Main;
 
-const Version = 'v2015.09.26';
+const Version = 'v2016.08.20';
 
 implementation
 
@@ -404,7 +404,7 @@ begin
         Exit;
     end;
 
-    stat_bar.Panels[0].Text := Application.Title + '   ' + Version + '   Copyleft @ »ªÐÖ   Email£º591881218@qq.com';
+    stat_bar.Panels[0].Text := Application.Title + '   ' + Version + '   Copyleft @ »ªÐÖ   Email£ºjianghua.wang@foxmail.com';
 
     cbb_ConnMode.ItemIndex := conn_mode_comm;
     cbb_ConnModeChange(cbb_ConnMode);

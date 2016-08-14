@@ -21,51 +21,29 @@ type
     edt_hardware_version: TEdit;
     edt_software_version: TEdit;
     chk_all: TCheckBox;
-    scrlbx2: TGroupBox;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    edt_cal_read_grp2: TEdit;
-    edt_cal_write_grp1: TEdit;
-    edt_cal_read_grp4: TEdit;
-    edt_cal_read_grp3: TEdit;
-    edt_cal_read_grp1: TEdit;
-    edt_cal_write_grp2: TEdit;
-    edt_cal_write_grp3: TEdit;
-    edt_cal_write_grp4: TEdit;
-    btn_cal_save_grp1: TButton;
-    btn_cal_save_grp2: TButton;
-    btn_cal_save_grp3: TButton;
-    btn_cal_save_grp4: TButton;
-    Label5: TLabel;
-    edt_cal_read_grp5: TEdit;
-    edt_cal_write_grp5: TEdit;
-    btn_cal_save_grp5: TButton;
-    btn_cal_read_para: TBitBtn;
     btn_sysinfo_read_para: TBitBtn;
     GroupBox1: TGroupBox;
-    btn_debounce_read_para: TButton;
-    btn_cal_confirm: TButton;
+    btn_mems_para_read: TButton;
     Label6: TLabel;
-    edt_debounce_threshold_read: TEdit;
-    edt_debounce_threshold_write: TEdit;
-    btn_debounce_save_threshold: TButton;
+    edt_mems_sample_num_read: TEdit;
+    edt_mems_sample_num_write: TEdit;
+    btn_mems_sample_num_save: TButton;
+    edt_mems_measure_flow_read: TEdit;
+    btn_mems_standard_flow_save: TButton;
+    edt_mems_standard_flow_write: TEdit;
+    Label7: TLabel;
+    Label8: TLabel;
+    edt_mems_cal_coefficient_read: TEdit;
+    Label9: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure chk_allClick(Sender: TObject);
     procedure edt_memsInput(Sender: TObject; var Key: Char);
     procedure btn_sysinfo_read_paraClick(Sender: TObject);
     procedure btn_sysinfo_write_paraClick(Sender: TObject);
     procedure btn_restore_defaultsClick(Sender: TObject);
-    procedure btn_cal_read_paraClick(Sender: TObject);
-    procedure btn_cal_save_grp1Click(Sender: TObject);
-    procedure btn_cal_save_grp2Click(Sender: TObject);
-    procedure btn_cal_save_grp3Click(Sender: TObject);
-    procedure btn_cal_save_grp4Click(Sender: TObject);
-    procedure btn_cal_save_grp5Click(Sender: TObject);
-    procedure btn_cal_confirmClick(Sender: TObject);
-    procedure btn_debounce_read_paraClick(Sender: TObject);
-    procedure btn_debounce_save_thresholdClick(Sender: TObject);
+    procedure btn_mems_para_readClick(Sender: TObject);
+    procedure btn_mems_sample_num_saveClick(Sender: TObject);
+    procedure btn_mems_standard_flow_saveClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -85,15 +63,9 @@ const
 	WRITE_TIME_CMD = $FF000003;
 	READ_VERSION_CMD = $FF000004;
 	RESTORE_CMD = $FF000005;
-	READ_CAL_CMD = $FF000006;
-	WRITE_CAL_GRP1_CMD = $FF000007;
-	WRITE_CAL_GRP2_CMD = $FF000008;
-	WRITE_CAL_GRP3_CMD = $FF000009;
-	WRITE_CAL_GRP4_CMD = $FF00000A;
-	WRITE_CAL_GRP5_CMD = $FF00000B;
-	CAL_CONFIRM_CMD = $FF00000C;
-	READ_DEBOUNCE_CMD = $FF00000D;
-	WRITE_DEBOUNCE_THRESHOLD_CMD = $FF00000E;
+	READ_MEMS_PARA_CMD = $FF000006;
+	WRITE_MEMS_SAMPLE_NUM_CMD = $FF000007;
+	WRITE_MEMS_CAL_COEFFICIENT_CMD = $FF000008;
 
 var
 	DL645: T_Protocol_645;
@@ -181,16 +153,16 @@ begin
 											   		weekCaption[PByte(Integer(pdata) + 3)^ mod 7]
 											   		]);
 	      			
-	      				g_disp.DispLog('读系统时间成功');
+	      				g_disp.DispLog('系统时间读取成功');
 	      			end
 	      			else
 	      			begin
-	      				g_disp.DispLog('读系统时间失败');
+	      				g_disp.DispLog('系统时间读取失败');
 	      			end;
 	      		end	
 		    	else
 		    	begin
-		    		g_disp.DispLog('读系统时间失败');
+		    		g_disp.DispLog('系统时间读取失败');
 		    	end;
 		    end
 		    else
@@ -259,16 +231,16 @@ begin
 															PByte(Integer(pdata) + 9)^
 															]);
 	      			
-	      				g_disp.DispLog('读版本号成功');
+	      				g_disp.DispLog('版本号读取成功');
 	      			end
 	      			else
 	      			begin
-	      				g_disp.DispLog('读版本号失败');
+	      				g_disp.DispLog('版本号读取失败');
 	      			end;
 	      		end	
 		    	else
 		    	begin
-		    		g_disp.DispLog('读版本号失败');
+		    		g_disp.DispLog('版本号读取失败');
 		    	end;
 		    end
 		    else
@@ -341,16 +313,16 @@ begin
 					
 	      			if ctrl = $94 then
 	      			begin
-	      				g_disp.DispLog('写系统时间成功');
+	      				g_disp.DispLog('系统时间写入成功');
 	      			end
 	      			else
 	      			begin
-	      				g_disp.DispLog('写系统时间失败');
+	      				g_disp.DispLog('系统时间写入失败');
 	      			end;
 	      		end	
 		    	else
 		    	begin
-		    		g_disp.DispLog('写系统时间失败');
+		    		g_disp.DispLog('系统时间写入失败');
 		    	end;
 		    end
 		    else
@@ -429,529 +401,24 @@ begin
 	TButton(Sender).Enabled := True;
 end;
 
-procedure TF_MEMS.btn_cal_read_paraClick(Sender: TObject);
+procedure TF_MEMS.btn_mems_para_readClick(Sender: TObject);
 var
 	p:PByte;
 	ctrl:Byte;
-	len, cal_complete:Integer;
-	DI:LongWord;  
-	pdata:PInteger;
-begin
-	TButton(Sender).Enabled := FALSE;
-	
-	edt_cal_read_grp1.Text := '';
-	edt_cal_read_grp2.Text := '';
-	edt_cal_read_grp3.Text := '';
-	edt_cal_read_grp4.Text := '';
-	edt_cal_read_grp5.Text := '';
-	
-	DL645_Ctrl := $11;
-
-	DL645_DI := READ_CAL_CMD;
-	
-	len := 0;
-
-	P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, nil, len);
-
-	DL645_Len := DL645.GetFrameLen();
-
-	CommMakeFrame2(P_DL645_Frame, DL645_Len);
-
-	if F_Main.SendDataAuto()
-		and CommWaitForResp()
-	then
-	begin	
-		if CommRecved = True then
-	    begin
-	    	CommRecved := False;
-	    	
-       		p := GetCommRecvBufAddr();
-      		len := GetCommRecvDataLen();   	
-      		
-      		if DL645.CheckFrame(p, len) = True then
-      		begin
-      			ctrl := DL645.GetCtrl();
-      			DI := DL645.GetDI();
-				p := DL645.GetDataUnit();
-				len := DL645.GetDataUnitLen();
-				
-      			if (ctrl = $91) and (DI = READ_CAL_CMD) then
-      			begin
-					pdata := PInteger(p);
-      			
-					cal_complete := PInteger(Integer(pdata) + 0 * 4)^;
-
-					edt_cal_read_grp1.Text := Format('(%.d, %.d)', [
-										   		     PInteger(Integer(pdata) + 1 * 4)^,
-										   			 PInteger(Integer(pdata) + 2 * 4)^
-										   			 ]);
-
-					edt_cal_read_grp2.Text := Format('(%.d, %.d)', [
-										   			 PInteger(Integer(pdata) + 3 * 4)^,
-										   			 PInteger(Integer(pdata) + 4 * 4)^
-										   			 ]);
-
-					edt_cal_read_grp3.Text := Format('(%.d, %.d)', [
-										   			 PInteger(Integer(pdata) + 5 * 4)^,
-										   			 PInteger(Integer(pdata) + 6 * 4)^
-										   			 ]);
-										   		
-					edt_cal_read_grp4.Text := Format('(%.d, %.d)', [
-										   			 PInteger(Integer(pdata) + 7 * 4)^,
-										   			 PInteger(Integer(pdata) + 8 * 4)^
-										   			 ]);
-										   		
-					edt_cal_read_grp5.Text := Format('(%.d, %.d)', [
-										   			 PInteger(Integer(pdata) + 9 * 4)^,
-										   			 PInteger(Integer(pdata) + 10 * 4)^
-										   		 	 ]);
-
-					if cal_complete <> 0 then
-					begin
-      					g_disp.DispLog('读流量校准成功，校准已完成');
-      				end
-      				else
-      				begin
-      					g_disp.DispLog('读流量校准成功，校准未完成');
-      				end;
-      			end
-      			else
-      			begin
-      				g_disp.DispLog('读流量校准失败');
-      			end;
-      		end	
-	    	else
-	    	begin
-	    		g_disp.DispLog('读流量校准失败');
-	    	end;
-	    end
-	    else
-	    begin
-	    	g_disp.DispLog('串口接收无数据');
-	    end;
-	end  
-	else
-	begin
-	
-	end;  
-
-	TButton(Sender).Enabled := TRUE;
-end;
-
-procedure TF_MEMS.btn_cal_save_grp1Click(Sender: TObject);
-var
-	p:PByte;
-	ctrl:Byte;
-	len, data:Integer;
-	buf:array[0..63] of Byte;
-begin
-	TButton(Sender).Enabled := FALSE;
-
-	data := StrToInt(edt_cal_write_grp1.text);
-
-	CopyMemory(@buf[0], @data, 4);
-	
-	DL645_Ctrl := $14;
-
-	DL645_DI := WRITE_CAL_GRP1_CMD;
-	
-	len := 4;
-
-	P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, @buf[0], len);
-
-	DL645_Len := DL645.GetFrameLen();
-
-	CommMakeFrame2(P_DL645_Frame, DL645_Len);
-
-	if F_Main.SendDataAuto()
-		and CommWaitForResp()
-	then
-	begin	
-		if CommRecved = True then
-	    begin
-	    	CommRecved := False;
-	    	
-       		p := GetCommRecvBufAddr();
-      		len := GetCommRecvDataLen();   	
-      		
-      		if DL645.CheckFrame(p, len) = True then
-      		begin
-      			ctrl := DL645.GetCtrl();
-				
-      			if ctrl = $94 then
-      			begin
-      				g_disp.DispLog('第一组流量校准成功');
-      			end
-      			else
-      			begin
-      				g_disp.DispLog('第一组流量校准失败');
-      			end;
-      		end	
-	    	else
-	    	begin
-	    		g_disp.DispLog('第一组流量校准失败');
-	    	end;
-	    end
-	    else
-	    begin
-	    	g_disp.DispLog('串口接收无数据');
-	    end;
-	end  
-	else
-	begin
-	
-	end;  
-
-    TButton(Sender).Enabled := TRUE;
-end;
-
-procedure TF_MEMS.btn_cal_save_grp2Click(Sender: TObject);
-var
-	p:PByte;
-	ctrl:Byte;
-	len, data:Integer;
-	buf:array[0..63] of Byte;
-begin
-	TButton(Sender).Enabled := FALSE;
-
-	data := StrToInt(edt_cal_write_grp2.text);
-
-	CopyMemory(@buf[0], @data, 4);
-	
-	DL645_Ctrl := $14;
-
-	DL645_DI := WRITE_CAL_GRP2_CMD;
-	
-	len := 4;
-
-	P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, @buf[0], len);
-
-	DL645_Len := DL645.GetFrameLen();
-
-	CommMakeFrame2(P_DL645_Frame, DL645_Len);
-
-	if F_Main.SendDataAuto()
-		and CommWaitForResp()
-	then
-	begin	
-		if CommRecved = True then
-	    begin
-	    	CommRecved := False;
-	    	
-       		p := GetCommRecvBufAddr();
-      		len := GetCommRecvDataLen();   	
-      		
-      		if DL645.CheckFrame(p, len) = True then
-      		begin
-      			ctrl := DL645.GetCtrl();
-				
-      			if ctrl = $94 then
-      			begin
-      				g_disp.DispLog('第二组流量校准成功');
-      			end
-      			else
-      			begin
-      				g_disp.DispLog('第二组流量校准失败');
-      			end;
-      		end	
-	    	else
-	    	begin
-	    		g_disp.DispLog('第二组流量校准失败');
-	    	end;
-	    end
-	    else
-	    begin
-	    	g_disp.DispLog('串口接收无数据');
-	    end;
-	end  
-	else
-	begin
-	
-	end;  
-
-    TButton(Sender).Enabled := TRUE;
-end;
-
-procedure TF_MEMS.btn_cal_save_grp3Click(Sender: TObject);
-var
-	p:PByte;
-	ctrl:Byte;
-	len, data:Integer;
-	buf:array[0..63] of Byte;
-begin
-	TButton(Sender).Enabled := FALSE;
-
-	data := StrToInt(edt_cal_write_grp3.text);
-
-	CopyMemory(@buf[0], @data, 4);
-	
-	DL645_Ctrl := $14;
-
-	DL645_DI := WRITE_CAL_GRP3_CMD;
-	
-	len := 4;
-
-	P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, @buf[0], len);
-
-	DL645_Len := DL645.GetFrameLen();
-
-	CommMakeFrame2(P_DL645_Frame, DL645_Len);
-
-	if F_Main.SendDataAuto()
-		and CommWaitForResp()
-	then
-	begin	
-		if CommRecved = True then
-	    begin
-	    	CommRecved := False;
-	    	
-       		p := GetCommRecvBufAddr();
-      		len := GetCommRecvDataLen();   	
-      		
-      		if DL645.CheckFrame(p, len) = True then
-      		begin
-      			ctrl := DL645.GetCtrl();
-				
-      			if ctrl = $94 then
-      			begin
-      				g_disp.DispLog('第三组流量校准成功');
-      			end
-      			else
-      			begin
-      				g_disp.DispLog('第三组流量校准失败');
-      			end;
-      		end	
-	    	else
-	    	begin
-	    		g_disp.DispLog('第三组流量校准失败');
-	    	end;
-	    end
-	    else
-	    begin
-	    	g_disp.DispLog('串口接收无数据');
-	    end;
-	end  
-	else
-	begin
-	
-	end;  
-
-    TButton(Sender).Enabled := TRUE;
-end;
-
-procedure TF_MEMS.btn_cal_save_grp4Click(Sender: TObject);
-var
-	p:PByte;
-	ctrl:Byte;
-	len, data:Integer;
-	buf:array[0..63] of Byte;
-begin
-	TButton(Sender).Enabled := FALSE;
-
-	data := StrToInt(edt_cal_write_grp4.text);
-
-	CopyMemory(@buf[0], @data, 4);
-	
-	DL645_Ctrl := $14;
-
-	DL645_DI := WRITE_CAL_GRP4_CMD;
-	
-	len := 4;
-
-	P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, @buf[0], len);
-
-	DL645_Len := DL645.GetFrameLen();
-
-	CommMakeFrame2(P_DL645_Frame, DL645_Len);
-
-	if F_Main.SendDataAuto()
-		and CommWaitForResp()
-	then
-	begin	
-		if CommRecved = True then
-	    begin
-	    	CommRecved := False;
-	    	
-       		p := GetCommRecvBufAddr();
-      		len := GetCommRecvDataLen();   	
-      		
-      		if DL645.CheckFrame(p, len) = True then
-      		begin
-      			ctrl := DL645.GetCtrl();
-				
-      			if ctrl = $94 then
-      			begin
-      				g_disp.DispLog('第四组流量校准成功');
-      			end
-      			else
-      			begin
-      				g_disp.DispLog('第四组流量校准失败');
-      			end;
-      		end	
-	    	else
-	    	begin
-	    		g_disp.DispLog('第四组流量校准失败');
-	    	end;
-	    end
-	    else
-	    begin
-	    	g_disp.DispLog('串口接收无数据');
-	    end;
-	end  
-	else
-	begin
-	
-	end;  
-
-    TButton(Sender).Enabled := TRUE;
-end;
-
-procedure TF_MEMS.btn_cal_save_grp5Click(Sender: TObject);
-var
-	p:PByte;
-	ctrl:Byte;
-	len, data:Integer;
-	buf:array[0..63] of Byte;
-begin
-	TButton(Sender).Enabled := FALSE;
-
-	data := StrToInt(edt_cal_write_grp5.text);
-
-	CopyMemory(@buf[0], @data, 4);
-	
-	DL645_Ctrl := $14;
-
-	DL645_DI := WRITE_CAL_GRP5_CMD;
-	
-	len := 4;
-
-	P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, @buf[0], len);
-
-	DL645_Len := DL645.GetFrameLen();
-
-	CommMakeFrame2(P_DL645_Frame, DL645_Len);
-
-	if F_Main.SendDataAuto()
-		and CommWaitForResp()
-	then
-	begin	
-		if CommRecved = True then
-	    begin
-	    	CommRecved := False;
-	    	
-       		p := GetCommRecvBufAddr();
-      		len := GetCommRecvDataLen();   	
-      		
-      		if DL645.CheckFrame(p, len) = True then
-      		begin
-      			ctrl := DL645.GetCtrl();
-				
-      			if ctrl = $94 then
-      			begin
-      				g_disp.DispLog('第五组流量校准成功');
-      			end
-      			else
-      			begin
-      				g_disp.DispLog('第五组流量校准失败');
-      			end;
-      		end	
-	    	else
-	    	begin
-	    		g_disp.DispLog('第五组流量校准失败');
-	    	end;
-	    end
-	    else
-	    begin
-	    	g_disp.DispLog('串口接收无数据');
-	    end;
-	end  
-	else
-	begin
-	
-	end;  
-
-    TButton(Sender).Enabled := TRUE;
-end;
-
-procedure TF_MEMS.btn_cal_confirmClick(Sender: TObject);
-var
-	p:PByte;
-	ctrl:Byte;
-	len:Integer;
-	DI:LongWord;
-begin
-	TButton(Sender).Enabled := False;
-
-	DL645_Ctrl := $11;
-
-	DL645_DI := CAL_CONFIRM_CMD;
-	
-	len := 0;
-
-	P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, nil, len);
-
-	DL645_Len := DL645.GetFrameLen();
-
-	CommMakeFrame2(P_DL645_Frame, DL645_Len);
-
-	if F_Main.SendDataAuto()
-		and CommWaitForResp()
-	then
-	begin	
-		if CommRecved = True then
-	    begin
-	    	CommRecved := False;
-	    	
-       		p := GetCommRecvBufAddr();
-      		len := GetCommRecvDataLen();   	
-      		
-      		if DL645.CheckFrame(p, len) = True then
-      		begin
-      			ctrl := DL645.GetCtrl();
-      			DI := DL645.GetDI();
-      			
-      			if (ctrl = $91) and (DI = CAL_CONFIRM_CMD) then
-      			begin      			
-      				g_disp.DispLog('流量校准完成');
-      			end
-      			else
-      			begin
-      				g_disp.DispLog('流量校准未完成');
-      			end;
-      		end	
-	    	else
-	    	begin
-	    		g_disp.DispLog('流量校准未完成');
-	    	end;
-	    end
-	    else
-	    begin
-	    	g_disp.DispLog('串口接收无数据');
-	    end;
-	end  
-	else
-	begin
-	
-	end;  
-
-	TButton(Sender).Enabled := True;
-end;
-
-procedure TF_MEMS.btn_debounce_read_paraClick(Sender: TObject);
-var
-	p:PByte;
-	ctrl:Byte;
-	len, debounce_threshold:Integer;
+	len, measure_flow, sample_num:Integer;
+	cal_coefficient:Single;
 	DI:LongWord;
 	pdata:PInteger;
 begin
 	TButton(Sender).Enabled := False;
 
-	edt_debounce_threshold_read.text := '';
+	edt_mems_measure_flow_read.text := '';
+  	edt_mems_sample_num_read.text := '';
+  	edt_mems_cal_coefficient_read.text := '';
 
 	DL645_Ctrl := $11;
 
-	DL645_DI := READ_DEBOUNCE_CMD;
+	DL645_DI := READ_MEMS_PARA_CMD;
 	
 	len := 0;
 
@@ -979,24 +446,28 @@ begin
 				p := DL645.GetDataUnit();
 				len := DL645.GetDataUnitLen();
 					
-      			if (ctrl = $91) and (DI = READ_DEBOUNCE_CMD) then
+      			if (ctrl = $91) and (DI = READ_MEMS_PARA_CMD) then
       			begin
 					pdata := PInteger(p);
       			
-					debounce_threshold := PInteger(Integer(pdata) + 0 * 4)^;
+					measure_flow := PInteger(Integer(pdata) + 0 * 4)^;
+					sample_num := PInteger(Integer(pdata) + 1 * 4)^;
+					cal_coefficient := PSingle(Integer(pdata) + 2 * 4)^;
 
-					edt_debounce_threshold_read.text := IntToStr(debounce_threshold);
+					edt_mems_measure_flow_read.text := IntToStr(measure_flow);
+					edt_mems_sample_num_read.text := IntToStr(sample_num);
+					edt_mems_cal_coefficient_read.text := FloatToStr(cal_coefficient);
       			
-      				g_disp.DispLog('读流量消抖成功');
+      				g_disp.DispLog('流量计参数读取成功');
       			end
       			else
       			begin
-      				g_disp.DispLog('读流量消抖失败');
+      				g_disp.DispLog('流量计参数读取失败');
       			end;
       		end	
 	    	else
 	    	begin
-	    		g_disp.DispLog('读流量消抖失败');
+	    		g_disp.DispLog('流量计参数读取失败');
 	    	end;
 	    end
 	    else
@@ -1012,22 +483,32 @@ begin
 	TButton(Sender).Enabled := True;
 end;
 
-procedure TF_MEMS.btn_debounce_save_thresholdClick(Sender: TObject);
+procedure TF_MEMS.btn_mems_sample_num_saveClick(Sender: TObject);
 var
 	p:PByte;
 	ctrl:Byte;
 	len, data:Integer;
+	strTmp:String;
 	buf:array[0..63] of Byte;
 begin
-	TButton(Sender).Enabled := FALSE;
+	strTmp := edt_mems_sample_num_write.text;
 
-	data := StrToInt(edt_debounce_threshold_write.text);
+	if strTmp = '' then
+	begin
+		Beep(); //调用系统声音
+		g_disp.DispLog('请输入一个数值');
+		Abort(); //中止程序的运行
+	end;
+	
+	TButton(Sender).Enabled := FALSE;
+  
+	data := StrToInt(edt_mems_sample_num_write.text);
 
 	CopyMemory(@buf[0], @data, 4);
 	
 	DL645_Ctrl := $14;
 
-	DL645_DI := WRITE_DEBOUNCE_THRESHOLD_CMD;
+	DL645_DI := WRITE_MEMS_SAMPLE_NUM_CMD;
 	
 	len := 4;
 
@@ -1054,16 +535,93 @@ begin
 				
       			if ctrl = $94 then
       			begin
-      				g_disp.DispLog('写流量消抖阈值成功');
+      				g_disp.DispLog('流量计样本数目写入成功');
       			end
       			else
       			begin
-      				g_disp.DispLog('写流量消抖阈值失败');
+      				g_disp.DispLog('流量计样本数目写入失败');
       			end;
       		end	
 	    	else
 	    	begin
-	    		g_disp.DispLog('写流量消抖阈值失败');
+	    		g_disp.DispLog('流量计样本数目写入失败');
+	    	end;
+	    end
+	    else
+	    begin
+	    	g_disp.DispLog('串口接收无数据');
+	    end;
+	end  
+	else
+	begin
+	
+	end;  
+
+    TButton(Sender).Enabled := TRUE;
+end;
+
+procedure TF_MEMS.btn_mems_standard_flow_saveClick(Sender: TObject);
+var
+	p:PByte;
+	ctrl:Byte;
+	len, data:Integer;
+	strTmp:String;
+	buf:array[0..63] of Byte;
+begin
+	strTmp := edt_mems_standard_flow_write.text;
+
+	if strTmp = '' then
+	begin
+		Beep(); //调用系统声音
+		g_disp.DispLog('请输入一个数值');
+		Abort(); //中止程序的运行
+	end;
+	
+	TButton(Sender).Enabled := FALSE;
+
+	data := StrToInt(edt_mems_standard_flow_write.text);
+
+	CopyMemory(@buf[0], @data, 4);
+	
+	DL645_Ctrl := $14;
+
+	DL645_DI := WRITE_MEMS_CAL_COEFFICIENT_CMD;
+	
+	len := 4;
+
+	P_DL645_Frame := DL645.MakeFrame_645(DL645_Ctrl, DL645_DI, @buf[0], len);
+
+	DL645_Len := DL645.GetFrameLen();
+
+	CommMakeFrame2(P_DL645_Frame, DL645_Len);
+
+	if F_Main.SendDataAuto()
+		and CommWaitForResp()
+	then
+	begin	
+		if CommRecved = True then
+	    begin
+	    	CommRecved := False;
+	    	
+       		p := GetCommRecvBufAddr();
+      		len := GetCommRecvDataLen();   	
+      		
+      		if DL645.CheckFrame(p, len) = True then
+      		begin
+      			ctrl := DL645.GetCtrl();
+				
+      			if ctrl = $94 then
+      			begin
+      				g_disp.DispLog('流量计校准成功');
+      			end
+      			else
+      			begin
+      				g_disp.DispLog('流量计校准失败');
+      			end;
+      		end	
+	    	else
+	    	begin
+	    		g_disp.DispLog('流量计校准失败');
 	    	end;
 	    end
 	    else
