@@ -65,7 +65,7 @@ const
 	RESTORE_CMD = $FF000005;
 	READ_MEMS_PARA_CMD = $FF000006;
 	WRITE_MEMS_SAMPLE_NUM_CMD = $FF000007;
-	WRITE_MEMS_CAL_COEFFICIENT_CMD = $FF000008;
+	WRITE_MEMS_STANDARD_FLOW_CMD = $FF000008;
 
 var
 	DL645: T_Protocol_645;
@@ -103,7 +103,7 @@ var
 	DI:LongWord;  
 	const weekCaption:array[0..6] of string = ('星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
 begin
-	TButton(Sender).Enabled := FALSE;
+	TButton(Sender).Enabled := False;
 	
 	//系统时间
 	chk := chk_sys_time;
@@ -254,7 +254,7 @@ begin
 		end;  
     end;
 
-	TButton(Sender).Enabled := TRUE;    
+	TButton(Sender).Enabled := True;    
 end;
 
 procedure TF_MEMS.btn_sysinfo_write_paraClick(Sender: TObject);
@@ -266,7 +266,7 @@ var
 	DateTime:TDateTime;
 	buf:array[0..63] of Byte;
 begin
-	TButton(Sender).Enabled := FALSE;
+	TButton(Sender).Enabled := False;
 	
 	//系统时间
 	chk := chk_sys_time;
@@ -336,7 +336,7 @@ begin
 		end;  
     end;
 
-    TButton(Sender).Enabled := TRUE;
+    TButton(Sender).Enabled := True;
 end;
 
 procedure TF_MEMS.btn_restore_defaultsClick(Sender: TObject);
@@ -486,9 +486,10 @@ end;
 procedure TF_MEMS.btn_mems_sample_num_saveClick(Sender: TObject);
 var
 	p:PByte;
-	ctrl:Byte;
+	ctrl, error_code:Byte;
 	len, data:Integer;
 	strTmp:String;
+	pdata:PInteger;
 	buf:array[0..63] of Byte;
 begin
 	strTmp := edt_mems_sample_num_write.text;
@@ -500,7 +501,7 @@ begin
 		Abort(); //中止程序的运行
 	end;
 	
-	TButton(Sender).Enabled := FALSE;
+	TButton(Sender).Enabled := False;
   
 	data := StrToInt(edt_mems_sample_num_write.text);
 
@@ -532,14 +533,26 @@ begin
       		if DL645.CheckFrame(p, len) = True then
       		begin
       			ctrl := DL645.GetCtrl();
+      			p := DL645.GetDataUnit();
 				
       			if ctrl = $94 then
       			begin
       				g_disp.DispLog('流量计样本数目写入成功');
       			end
-      			else
+      			else if ctrl = $D4 then
       			begin
-      				g_disp.DispLog('流量计样本数目写入失败');
+					pdata := PInteger(p);
+      			
+					error_code := PByte(Integer(pdata) + 0 * 1)^;
+
+      				if error_code = $01 then
+      				begin
+      					g_disp.DispLog('输入的参数无效');
+      				end
+      				else if error_code = $02 then
+      				begin
+      					g_disp.DispLog('流量计样本数目写入失败');
+      				end;
       			end;
       		end	
 	    	else
@@ -557,15 +570,16 @@ begin
 	
 	end;  
 
-    TButton(Sender).Enabled := TRUE;
+    TButton(Sender).Enabled := True;
 end;
 
 procedure TF_MEMS.btn_mems_standard_flow_saveClick(Sender: TObject);
 var
 	p:PByte;
-	ctrl:Byte;
+	ctrl, error_code:Byte;
 	len, data:Integer;
 	strTmp:String;
+	pdata:PInteger;
 	buf:array[0..63] of Byte;
 begin
 	strTmp := edt_mems_standard_flow_write.text;
@@ -577,7 +591,7 @@ begin
 		Abort(); //中止程序的运行
 	end;
 	
-	TButton(Sender).Enabled := FALSE;
+	TButton(Sender).Enabled := False;
 
 	data := StrToInt(edt_mems_standard_flow_write.text);
 
@@ -585,7 +599,7 @@ begin
 	
 	DL645_Ctrl := $14;
 
-	DL645_DI := WRITE_MEMS_CAL_COEFFICIENT_CMD;
+	DL645_DI := WRITE_MEMS_STANDARD_FLOW_CMD;
 	
 	len := 4;
 
@@ -609,14 +623,26 @@ begin
       		if DL645.CheckFrame(p, len) = True then
       		begin
       			ctrl := DL645.GetCtrl();
+      			p := DL645.GetDataUnit();
 				
       			if ctrl = $94 then
       			begin
       				g_disp.DispLog('流量计校准成功');
       			end
-      			else
+      			else if ctrl = $D4 then
       			begin
-      				g_disp.DispLog('流量计校准失败');
+					pdata := PInteger(p);
+      			
+					error_code := PByte(Integer(pdata) + 0 * 1)^;
+
+      				if error_code = $01 then
+      				begin
+      					g_disp.DispLog('输入的参数无效');
+      				end
+      				else if error_code = $02 then
+      				begin
+      					g_disp.DispLog('流量计校准失败');
+      				end;
       			end;
       		end	
 	    	else
@@ -634,7 +660,7 @@ begin
 	
 	end;  
 
-    TButton(Sender).Enabled := TRUE;
+    TButton(Sender).Enabled := True;
 end;
 
 end.
